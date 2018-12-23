@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class Test : MonoBehaviour
+public class AntController : MonoBehaviour
 {
     public float MaxSpeed = 7;
     public float PathRadius = 0.05f;
