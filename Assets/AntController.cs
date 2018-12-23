@@ -30,7 +30,7 @@ public class AntController : MonoBehaviour
     {
         Vector3 desireVector = (target - this.transform.position).normalized * MaxSpeed;
         Vector3 steeringVector = desireVector - _rigidbody.velocity;
-        _rigidbody.AddForce(steeringVector);
+        _rigidbody.AddForce(steeringVector, ForceMode.Acceleration);
     }
 
 
@@ -100,9 +100,9 @@ public class AntController : MonoBehaviour
 
         Vector3 orthoPoint = aa + a_to_b_Segment;
         // should probably be like 2 possible velocity time steps instead of arbitrary value
-        // Vector3 plusALittle = a_to_b_Segment.normalized;
-        // plusALittle = plusALittle * 8;
-        Vector3 newTarget = orthoPoint + a_to_b_Segment;
+        Vector3 plusALittle = a_to_b_Segment.normalized;
+        plusALittle = plusALittle * Vector3.Magnitude(this._rigidbody.velocity);
+        Vector3 newTarget = orthoPoint + plusALittle;
 
         Debug.Log("New Target: " + newTarget.ToString());
         float orthoHeight = Vector3.Distance(futurePos, orthoPoint);
