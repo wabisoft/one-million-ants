@@ -6,12 +6,6 @@ using UnityEngine;
 public class PlanetaryAttractor : MonoBehaviour
 {
     public float Gravity = -9.8f;
-    private Transform transform;
-
-    void Start()
-    {
-        transform = GetComponent<Transform>();
-    }
 
 
     public void Attract(PlanetaryAttractee attractee)
