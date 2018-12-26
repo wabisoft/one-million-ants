@@ -2,25 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class PlanetDragController : MonoBehaviour
 {
 
-    private Vector3? _previousPoint = null;
     private Camera _camera;
-
+    private Vector3? _previousPoint;
     // Use this for initialization
     void Start()
     {
         _camera = Camera.main;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void OnMouseDrag()
+    public void OnMouseDrag()
     {
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -44,5 +37,7 @@ public class CameraController : MonoBehaviour
     void OnMouseUp()
     {
         _previousPoint = null;
+
     }
+
 }

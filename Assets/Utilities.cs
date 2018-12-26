@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void ComputePath(ref Vector3[] arr, Vector3 center, float radius);
+
 public class Utilities
 {
+
+    private float epsilon = 1.001f;
 
     // Doesn't get a real geodesic
     // just computes a circle on the centering from center
@@ -17,6 +21,22 @@ public class Utilities
             theta += step;
         }
     }
+
+    public static void ComputeSpiralPath(ref Vector3[] arr, Vector3 center, float radius, float numberOfTurns = 5.0f)
+    {
+        float parameter = -radius;
+        float dparameter = -7.0f * (parameter / arr.Length);
+        for (int i = 0; i < arr.Length; i++)
+        {
+            arr[i] = new Vector3(
+                Mathf.Sqrt(Mathf.Pow(radius, 2.0f) - Mathf.Pow(parameter, 2.0f)) * Mathf.Cos(numberOfTurns * Mathf.PI * parameter / radius),
+                parameter,
+                Mathf.Sqrt(Mathf.Pow(radius, 2.0f) - Mathf.Pow(parameter, 2.0f)) * Mathf.Sin(numberOfTurns * Mathf.PI * parameter / radius)
+            );
+            parameter += dparameter;
+        }
+    }
+
 
     /// <summary>
     /// Finds the contiguous LineSegment [v0, v1] on canditates that Vector3 `to` is closest to
