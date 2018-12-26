@@ -14,7 +14,7 @@ public class SteeringController : MonoBehaviour
     public float pathRadius = .05f;
     public int pathVertices = 10;
     // public Vector3 pathCenter;
-    public ComputePath pathDelegate;
+    public ComputePath pathDelegate = Utilities.ComputeSpiralPath;
     private Vector3[] _path;
     // private Vector3 velocity;
     private Rigidbody _rigidbody;
@@ -29,7 +29,8 @@ public class SteeringController : MonoBehaviour
         // _rigidbody.AddForce(new Vector3(1, 1, 1), ForceMode.Impulse);
         acceleration = Vector3.zero;
         _path = new Vector3[pathVertices];
-        Utilities.ComputeSpiralPath(ref _path, Planet.center, Planet.radius * Planet.transform.localScale.x);
+        this.pathDelegate(ref _path, Planet.center, Planet.radius * Planet.transform.localScale.x);
+        // Utilities.ComputeSpiralPath(ref _path, Planet.center, Planet.radius * Planet.transform.localScale.x);
     }
 
     // pass the canvasbounds -- bounds are hard coded
@@ -37,9 +38,10 @@ public class SteeringController : MonoBehaviour
     {
         path();
         // TODO: Figure out how to use forces when seeking maybe? so we don't have to do all this
-        // this._rigidbody.velocity += this.acceleration;
-        // this._rigidbody.velocity = Vector3.ClampMagnitude(this._rigidbody.velocity, this.MaxSpeed);
-        // this.transform.position += this._rigidbody.velocity;
+        this._rigidbody.velocity += this.acceleration;
+        this._rigidbody.velocity = Vector3.ClampMagnitude(this._rigidbody.velocity, this.MaxSpeed);
+        this.transform.position += this._rigidbody.velocity;
+        // this._rigidbody.AddForce(this.acceleration);
         this.acceleration *= 0;
     }
 
@@ -49,11 +51,14 @@ public class SteeringController : MonoBehaviour
         Vector3 steeringVector;
 
         desireVector = (target - this.transform.position).normalized;
-        desireVector *= this.MaxSpeed; // shorthand for normalize & multiply
+        desireVector *= this.MaxSpeed * Time.deltaTime; // shorthand for normalize & multiply
         steeringVector = desireVector - this._rigidbody.velocity;
         steeringVector = Vector3.ClampMagnitude(steeringVector, this.MaxAcceleration);
         this.acceleration += steeringVector;
-        this._rigidbody.AddForce(this.acceleration, ForceMode.Acceleration);
+
+        // this._rigidbody.MovePosition(this._rigidbody.position + this.transform.TransformDirection(steeringVector) * this.MaxSpeed * Time.deltaTime);
+
+        // this._rigidbody.AddForce(this.acceleration, ForceMode.Acceleration);
     }
 
     // TODO: Rewrite in c#/unity
@@ -110,7 +115,9 @@ public class SteeringController : MonoBehaviour
 
         Vector3 aa;
         Vector3 bb;
-        Utilities.ClosestSegment(subject: futurePos, candidates: _path, closest: out aa, secondClosest: out bb);
+        Utilities.ClosestSegment(subject: futurePos, candidates: _path, closest: out aa, secondClosest: out bb, desired: _path[_path.Length - 1]);
+        Debug.Log(aa.ToString());
+        Debug.Log(bb.ToString());
 
         Vector3 a_to_futurePos = futurePos - aa;
         Vector3 a_to_b_Segment = (bb - aa).normalized;
@@ -132,7 +139,7 @@ public class SteeringController : MonoBehaviour
     void OnDrawGizmos()
     {
         Vector3[] path = new Vector3[pathVertices];
-        Utilities.ComputeSpiralPath(ref path, Planet.center, Planet.radius * Planet.transform.localScale.x);
+        this.pathDelegate(ref path, Planet.center, Planet.radius * Planet.transform.localScale.x);
         Gizmos.color = Color.blue;
         Gizmos.DrawSphere(path[0], 0.2f);
         Gizmos.color = Color.red;
