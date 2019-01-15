@@ -15,6 +15,7 @@ public class SteeringController : MonoBehaviour
     public int pathVertices = 10;
     // public Vector3 pathCenter;
     public ComputePath pathDelegate = Utilities.ComputeSpiralPath;
+    public bool Steer = true;
     private Vector3[] _path;
     // private Vector3 velocity;
     private Rigidbody _rigidbody;
@@ -30,13 +31,13 @@ public class SteeringController : MonoBehaviour
         acceleration = Vector3.zero;
         _path = new Vector3[pathVertices];
         this.pathDelegate(ref _path, Planet.center, Planet.radius * Planet.transform.localScale.x);
-        // Utilities.ComputeSpiralPath(ref _path, Planet.center, Planet.radius * Planet.transform.localScale.x);
     }
 
     // pass the canvasbounds -- bounds are hard coded
     void Update()
     {
-        path();
+        if (Steer)
+            path();
         // TODO: Figure out how to use forces when seeking maybe? so we don't have to do all this
         this._rigidbody.velocity += this.acceleration;
         this._rigidbody.velocity = Vector3.ClampMagnitude(this._rigidbody.velocity, this.MaxSpeed);
@@ -141,10 +142,10 @@ public class SteeringController : MonoBehaviour
         Vector3[] path = new Vector3[pathVertices];
         this.pathDelegate(ref path, Planet.center, Planet.radius * Planet.transform.localScale.x);
         Gizmos.color = Color.blue;
-        Gizmos.DrawSphere(path[0], 0.2f);
+        Gizmos.DrawSphere(path[0], 0.02f);
         Gizmos.color = Color.red;
         for (int i = 1; i < path.Length; i++)
-            Gizmos.DrawSphere(path[i], 0.2f);
+            Gizmos.DrawSphere(path[i], 0.02f);
     }
 
     void MakeSphere(Vector3 position, float arg_radius)

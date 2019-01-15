@@ -7,13 +7,13 @@ public delegate void ComputePath(ref Vector3[] arr, Vector3 center, float radius
 public class Utilities
 {
 
-    private static float epsilon = 1.001f;
+    public static float Epsilon = 1.0001f;
 
     // Doesn't get a real geodesic
     // just computes a circle on the centering from center
     public static void ComputeCirclePath(ref Vector3[] arr, Vector3 center, float radius)
     {
-        radius += epsilon;
+        radius *= Epsilon;
         float theta = 0;
         float step = 2 * Mathf.PI / arr.Length;
         // for (int i = 0; theta < 2 * Mathf.PI; i++)
@@ -26,7 +26,7 @@ public class Utilities
 
     public static void ComputeSpiralPath(ref Vector3[] arr, Vector3 center, float radius)
     {
-        radius += epsilon;
+        radius *= Epsilon;
         float numberOfTurns = 5.0f;
         float parameter = -radius;
         float dparameter = -7.0f * (parameter / arr.Length);

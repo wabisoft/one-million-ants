@@ -24,7 +24,8 @@ public class DragDropable : MonoBehaviour
     void OnMouseDown()
     {
         _rigidbody.isKinematic = true;
-        this.transform.position += this.transform.up * 1.005f;
+        this.transform.position += this.transform.up * (Utilities.Epsilon - 1);
+        GetComponent<SteeringController>().Steer = false;
     }
 
     void OnMouseDrag()
@@ -49,5 +50,6 @@ public class DragDropable : MonoBehaviour
     {
         this._rigidbody.isKinematic = false;
         this._rigidbody.velocity = Vector3.ClampMagnitude(this._relativeMove / Time.deltaTime, 30);
+        GetComponent<SteeringController>().Steer = true;
     }
 }
