@@ -1,6 +1,6 @@
 // uncomment different shaping functions if you're interested
 
-Shader "Holistic/ShapingCelShader" {
+Shader "Lighting/windWakerStyleCelShader" {
 	Properties 
 	{
 		_Color  ("Color", Color) = (1,1,1,1)
