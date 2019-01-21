@@ -22,9 +22,8 @@ public class PlanetDragController : MonoBehaviour
     {
         // Debug.Log(_axis.magnitude);
         // Debug.Log(_axis.ToString());
-        if(_axis.magnitude != 0)
+        if( _axis.magnitude != 0)
         {
-            // probably redundant
             float deltaTheta = _angularVel * Time.deltaTime;
             deltaTheta *= Mathf.Exp(-1.5f * _spinTimer);
             _camera.transform.RotateAround(this.transform.position, _axis, deltaTheta);
@@ -63,5 +62,4 @@ public class PlanetDragController : MonoBehaviour
         _previousPoint = null;
         _spinTimer = 0.0f;
     }
-
 }

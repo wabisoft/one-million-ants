@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7437448523699226955}
   - component: {fileID: 7437448523699226996}
   - component: {fileID: 7437448523699226952}
+  - component: {fileID: 7896166721837305742}
   m_Layer: 0
   m_Name: PlanetBlah
   m_TagString: Untagged
@@ -104,3 +105,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 672c88848935645dc9a307612c405621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7896166721837305742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7437448523699226997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac703c01bd08249a38d7ab5134d4b8b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gravity: -9.8

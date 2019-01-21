@@ -6,25 +6,35 @@ public class DragDropable : MonoBehaviour
 {
     public SphereCollider sphere;
 
-    private Vector3 _relativeMove;
+    // private Vector3 relativeMove;
+    private Vector3 _tangentialVelocity, _normal, _height;
     private Camera _camera;
-    private Rigidbody _rigidbody;
+    private Rigidbody _rigidbody; // 
+    private PlanetaryAttractee _attractee;
+    
 
+    public float heightMultiplier;
     void Start()
     {
         _camera = Camera.main;
         _rigidbody = GetComponent<Rigidbody>();
+        _attractee = GetComponent<PlanetaryAttractee>();
+        heightMultiplier = 0.8f;
+        _height = this.transform.up * heightMultiplier;
     }
-
-
     /// <summary>
     /// OnMouseDown is called when the user has pressed the mouse button while
     /// over the GUIElement or Collider.
     /// </summary>
     void OnMouseDown()
     {
-        _rigidbody.isKinematic = true;
-        this.transform.position += this.transform.up * 1.005f;
+        // turn off forces -- note that our faux Gravity isn't recognized automatically
+        // and has to be manually accounted for
+        // I'm deciding to not use isKinematic to save collision detection
+        _rigidbody.velocity = Vector3.zero;
+        _attractee.gravityFlag = false;
+
+        this.transform.position += _height; // Height is reused to keep tangential velocity consistent,  SEE _relativeMove operation
     }
 
     void OnMouseDrag()
@@ -35,10 +45,18 @@ public class DragDropable : MonoBehaviour
         {
             Vector3 v1 = this.transform.position - sphere.transform.position;
             Vector3 v2 = hit.point - sphere.transform.position;
-            _relativeMove = hit.point - this.transform.position;
+            Vector3 _normal = v2.normalized;
+            // (hit.point + _height) - this.transform.position; always going to be a differential distance
+            Vector3 relativeMove = (hit.point + _height) - this.transform.position; // needs to be same for tangential velocity
+            _tangentialVelocity = relativeMove/ Time.deltaTime;
+
+            // Debug.Log(_tangentialVelocity);
             Vector3 axis = Vector3.Cross(v1, v2);
-            float theta = 1 * Vector3.SignedAngle(v1, v2, axis);
+            float theta = Vector3.SignedAngle(v1, v2, axis);
             this.transform.RotateAround(sphere.transform.position, axis, theta);
+
+            // Naive solution/ brute force
+            _rigidbody.velocity = Vector3.zero; // account for losing isKinematic properties
         }
     }
 
@@ -47,7 +65,11 @@ public class DragDropable : MonoBehaviour
     /// </summary>
     void OnMouseUp()
     {
-        this._rigidbody.isKinematic = false;
-        this._rigidbody.velocity = Vector3.ClampMagnitude(this._relativeMove / Time.deltaTime, 30);
+
+        _attractee.gravityFlag = true;
+        // _rigidbody.velocity = _tangentialVelocity;
+        // // centripetal force F_c = m (v^2/r)
+        // float centripetalCoefficient = _rigidbody.mass * Mathf.Pow(_tangentialVelocity.magnitude, 2)/sphere.radius;
+        // _rigidbody.AddForce(-1 * _normal * centripetalCoefficient);
     }
 }

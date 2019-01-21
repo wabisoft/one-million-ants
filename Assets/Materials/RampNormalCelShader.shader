@@ -22,7 +22,7 @@ Shader "Lighting/RampNormalCelShader"
 		
 		float4 LightingRampCelShader (SurfaceOutput s, fixed3 lightDir, fixed atten)
 		{
-			float dotProd = dot (s.Normal, lightDir); // lightDir is already normalized
+			float dotProd = max(0.0, dot (s.Normal, lightDir)); // lightDir is already normalized
 			float uvTexMapValue = dotProd * 0.5 + 0.4;
 			float2 uvTexMapCoord = uvTexMapValue; // smearing
 
