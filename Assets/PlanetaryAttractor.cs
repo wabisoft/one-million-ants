@@ -12,7 +12,7 @@ public class PlanetaryAttractor : MonoBehaviour
     {
         Vector3 relativePositionVector = (attractee.transform.position - transform.position).normalized;
 
-        attractee.rigidBody.AddForce(relativePositionVector * Gravity);
+        // attractee.rigidBody.AddForce(relativePositionVector * Gravity);
 
         Quaternion targetRotation = Quaternion.FromToRotation(attractee.transform.up, relativePositionVector) * attractee.transform.rotation;
         attractee.transform.rotation = Quaternion.Slerp(attractee.transform.rotation, targetRotation, 50 * Time.deltaTime);
