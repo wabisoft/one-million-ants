@@ -123,7 +123,6 @@ public class SteeringController : MonoBehaviour
                 min = dist;
             }
         }
-        Debug.Log(index.ToString());
         if (index + 1 >= _path.Length)
             return new List<Vector3> { _path[index], _path[index - 1] };
         else
