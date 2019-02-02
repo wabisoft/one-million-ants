@@ -20,6 +20,6 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
-    - _nDiv: 4.9
+    - _nDiv: 2.6
     m_Colors:
     - _Color: {r: 0.58431375, g: 0.27831954, b: 0.2627451, a: 1}

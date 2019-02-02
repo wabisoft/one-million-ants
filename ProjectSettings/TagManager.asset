@@ -5,8 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Planet
-  - Wing1
   - Body
+  - Nozzle
+  - Head
+  - Wing1
+  - Wing2
+  - Wing3
+  - Wing4
   layers:
   - Default
   - TransparentFX

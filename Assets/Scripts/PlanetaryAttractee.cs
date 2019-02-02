@@ -13,12 +13,11 @@ public class PlanetaryAttractee : MonoBehaviour
     void Start()
     {   
         rb = GetComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
         rb.useGravity = false;
         gravityFlag = true;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         attractor.Attract(this);
     }

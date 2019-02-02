@@ -11,16 +11,14 @@ public class DragDropable : MonoBehaviour
     private Camera _camera;
     private Rigidbody _rigidbody; // 
     private PlanetaryAttractee _attractee;
-    
+    private Vector3 _upDirection;
+    public float heightMultiplier = 1;
 
-    public float heightMultiplier;
     void Start()
     {
         _camera = Camera.main;
         _rigidbody = GetComponent<Rigidbody>();
         _attractee = GetComponent<PlanetaryAttractee>();
-        heightMultiplier = 0.8f;
-        _height = this.transform.up * heightMultiplier;
     }
     /// <summary>
     /// OnMouseDown is called when the user has pressed the mouse button while
@@ -28,13 +26,24 @@ public class DragDropable : MonoBehaviour
     /// </summary>
     void OnMouseDown()
     {
+        _rigidbody.velocity = Vector3.zero;
+        _attractee.gravityFlag = false;
+        _upDirection = sphere.transform.position - transform.position;
         // turn off forces -- note that our faux Gravity isn't recognized automatically
         // and has to be manually accounted for
         // I'm deciding to not use isKinematic to save collision detection
-        _rigidbody.velocity = Vector3.zero;
-        _attractee.gravityFlag = false;
 
-        this.transform.position += _height; // Height is reused to keep tangential velocity consistent,  SEE _relativeMove operation
+        // Quaternion targetRotation = Quaternion.FromToRotation(transform.forward, _upDirection.normalized) * transform.rotation;
+        // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
+        transform.rotation = Quaternion.FromToRotation(transform.forward, _upDirection);
+
+        _upDirection = sphere.transform.position - transform.position;
+        _height = _upDirection.normalized * heightMultiplier;
+        
+        // how much of position vector is in the up direction = posVec * _upDirection.normalized
+        Vector3 heightComponent = Vector3.Scale(transform.position, _upDirection.normalized);
+        heightComponent += _height;
+        this.transform.position += heightComponent*.7f;
     }
 
     void OnMouseDrag()
@@ -48,14 +57,13 @@ public class DragDropable : MonoBehaviour
             Vector3 _normal = v2.normalized;
             // (hit.point + _height) - this.transform.position; always going to be a differential distance
             Vector3 relativeMove = (hit.point + _height) - this.transform.position; // needs to be same for tangential velocity
-            _tangentialVelocity = relativeMove/ Time.deltaTime;
+            // _tangentialVelocity = relativeMove/ Time.deltaTime;
 
             // Debug.Log(_tangentialVelocity);
             Vector3 axis = Vector3.Cross(v1, v2);
             float theta = Vector3.SignedAngle(v1, v2, axis);
             this.transform.RotateAround(sphere.transform.position, axis, theta);
 
-            // Naive solution/ brute force
             _rigidbody.velocity = Vector3.zero; // account for losing isKinematic properties
         }
     }
