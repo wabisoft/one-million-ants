@@ -10,15 +10,15 @@ public class DragDropable : MonoBehaviour
     private Vector3 _tangentialVelocity, _normal, _height;
     private Camera _camera;
     private Rigidbody _rigidbody; // 
-    private PlanetaryAttractee _attractee;
-    
+    private Gravity _gravity;
+
 
     public float heightMultiplier;
     void Start()
     {
         _camera = Camera.main;
         _rigidbody = GetComponent<Rigidbody>();
-        _attractee = GetComponent<PlanetaryAttractee>();
+        _gravity = GetComponent<Gravity>();
         heightMultiplier = 0.8f;
         _height = this.transform.up * heightMultiplier;
     }
@@ -32,7 +32,7 @@ public class DragDropable : MonoBehaviour
         // and has to be manually accounted for
         // I'm deciding to not use isKinematic to save collision detection
         _rigidbody.velocity = Vector3.zero;
-        _attractee.gravityFlag = false;
+        _gravity.on = false;
 
         this.transform.position += _height; // Height is reused to keep tangential velocity consistent,  SEE _relativeMove operation
     }
@@ -48,7 +48,7 @@ public class DragDropable : MonoBehaviour
             Vector3 _normal = v2.normalized;
             // (hit.point + _height) - this.transform.position; always going to be a differential distance
             Vector3 relativeMove = (hit.point + _height) - this.transform.position; // needs to be same for tangential velocity
-            _tangentialVelocity = relativeMove/ Time.deltaTime;
+            _tangentialVelocity = relativeMove / Time.deltaTime;
 
             // Debug.Log(_tangentialVelocity);
             Vector3 axis = Vector3.Cross(v1, v2);
@@ -66,7 +66,7 @@ public class DragDropable : MonoBehaviour
     void OnMouseUp()
     {
 
-        _attractee.gravityFlag = true;
+        _gravity.on = true;
         // _rigidbody.velocity = _tangentialVelocity;
         // // centripetal force F_c = m (v^2/r)
         // float centripetalCoefficient = _rigidbody.mass * Mathf.Pow(_tangentialVelocity.magnitude, 2)/sphere.radius;
