@@ -1,10 +1,9 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
 
-public class Vehical : MonoBehaviour
+public class Vehicle : MonoBehaviour
 {
 
     public float MaxSpeed = 3f; // Walking speed
