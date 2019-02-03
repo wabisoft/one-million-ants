@@ -4,15 +4,13 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class SteeringController : MonoBehaviour
+public class Vehical : MonoBehaviour
 {
 
-    public float MaxSpeed = 1.4f; // Walking speed
+    public float MaxSpeed = 3f; // Walking speed
     public SphereCollider Planet;
-    public float fleeRadius = 4f;
     public float pathRadius = .05f;
-    public int pathVertices = 10;
-    // public Vector3 pathCenter;
+    public int pathVertices = 100;
     public ComputePath pathDelegate = Utilities.ComputeSpiralPath;
     private Vector3[] _path;
     private Rigidbody _rigidbody;
@@ -21,14 +19,12 @@ public class SteeringController : MonoBehaviour
 
     void Start()
     {
-        // Time.timeScale = 0.75f;
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         _rigidbody.useGravity = false;
         _path = new Vector3[pathVertices];
         this.pathDelegate(ref _path, Planet.center, Planet.radius * Planet.transform.localScale.x);
         // this.pathDelegate(ref _path, new Vector3(-4.53f, 0.1f, -4.74f), 8.0f);
-        // Utilities.ComputeSpiralPath(ref _path, Planet.center, Planet.radius * Planet.transform.localScale.x);
     }
 
     // pass the canvasbounds -- bounds are hard coded
@@ -144,4 +140,5 @@ public class SteeringController : MonoBehaviour
             Debug.DrawLine(path[i - 1], path[i], Color.red);
         }
     }
+
 }
