@@ -6,6 +6,6 @@ public class Nozzle : MonoBehaviour, IShipPart
 {
     public void Combine(Ship ship)
     {
-        ship.attachNozzle(this);
+        ship.attach(this);
     }
 }

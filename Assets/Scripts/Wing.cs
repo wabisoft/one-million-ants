@@ -6,6 +6,6 @@ public class Wing : MonoBehaviour, IShipPart
 {
     public void Combine(Ship ship)
     {
-        ship.attachWing(this);
+        ship.attach(this);
     }
 }

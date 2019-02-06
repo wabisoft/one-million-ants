@@ -30,7 +30,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void attachWing(Wing wing)
+    public void attach(Wing wing)
     {
         if (_numWings > MaxWings) return;
 
@@ -52,7 +52,7 @@ public class Ship : MonoBehaviour
         _numWings++;
     }
 
-    public void attachNose(Nose nose)
+    public void attach(Nose nose)
     {
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -68,7 +68,7 @@ public class Ship : MonoBehaviour
         _hasNose = true;
     }
 
-    public void attachNozzle(Nozzle nozzle)
+    public void attach(Nozzle nozzle)
     {
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -110,5 +110,6 @@ public class Ship : MonoBehaviour
         transform.gameObject.AddComponent<MeshCollider>();
         transform.gameObject.GetComponent<MeshCollider>().convex = true;
         transform.gameObject.SetActive(true);
+        GameObject.Destroy(collisionObj);
     }
 }
