@@ -6,6 +6,6 @@ public class Nose : MonoBehaviour, IShipPart
 {
     public void Combine(Ship ship)
     {
-        ship.attach(this);
+        ship.Attach(this);
     }
 }

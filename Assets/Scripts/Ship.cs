@@ -30,7 +30,7 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void attach(Wing wing)
+    public void Attach(Wing wing)
     {
         if (_numWings > MaxWings) return;
 
@@ -47,13 +47,15 @@ public class Ship : MonoBehaviour
         wing.transform.position += 1.3f * scalingFactor * wing.transform.right;
         wing.transform.position += 1.5f * scalingFactor * wing.transform.up;
 
-        meshCombine(wing.gameObject);
+        MeshCombine(wing.gameObject);
 
         _numWings++;
     }
 
-    public void attach(Nose nose)
+    public void Attach(Nose nose)
     {
+        if (_hasNose) return;
+
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         Destroy(GetComponent<MeshCollider>());
@@ -62,14 +64,15 @@ public class Ship : MonoBehaviour
         nose.transform.rotation = transform.rotation;
         nose.transform.position = transform.position + (7.0f * scalingFactor * transform.forward); // blender models have z up
 
-        meshCombine(nose.gameObject);
+        MeshCombine(nose.gameObject);
 
-        // turn off ability to see head object -- unecessary, but w/e
         _hasNose = true;
     }
 
-    public void attach(Nozzle nozzle)
+    public void Attach(Nozzle nozzle)
     {
+        if (_hasNozzle) return;
+
         gameObject.GetComponent<Rigidbody>().isKinematic = true;
         gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         Destroy(GetComponent<MeshCollider>());
@@ -79,17 +82,15 @@ public class Ship : MonoBehaviour
         nozzle.transform.rotation = transform.rotation;
         nozzle.transform.position = transform.position - scalingFactor * transform.forward; // blender models have z up
 
+        MeshCombine(nozzle.gameObject);
 
-        meshCombine(nozzle.gameObject);
-
-        // turn off ability to see nozzle object -- unecessary, but w/e
-        _hasNose = true;
+        _hasNozzle = true;
     }
 
 
     // Anakin: "it's working!!"
     // https://www.youtube.com/watch?v=AXwGVXD7qEQ 
-    void meshCombine(GameObject collisionObj)
+    protected void MeshCombine(GameObject collisionObj)
     {
         MeshFilter[] meshFilters = new MeshFilter[2];
         meshFilters[0] = GetComponent<MeshFilter>();
@@ -110,6 +111,6 @@ public class Ship : MonoBehaviour
         transform.gameObject.AddComponent<MeshCollider>();
         transform.gameObject.GetComponent<MeshCollider>().convex = true;
         transform.gameObject.SetActive(true);
-        GameObject.Destroy(collisionObj);
+        Destroy(collisionObj);
     }
 }
