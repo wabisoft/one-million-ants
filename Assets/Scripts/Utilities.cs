@@ -6,7 +6,6 @@ public delegate void ComputePath(ref Vector3[] arr, Vector3 center, float radius
 
 public class Utilities
 {
-
     private static float epsilon = 1.001f;
 
     // Doesn't get a real geodesic
