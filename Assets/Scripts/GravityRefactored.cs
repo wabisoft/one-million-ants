@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,17 +7,20 @@ using UnityEngine;
 
 public class GravityRefactored : MonoBehaviour
 {
-    public Transform attractor; // massive body
-    private Rigidbody rb; // this body
+    public Transform attractor;
+    public bool RotationLocked = false;
     public bool on = true; // attract will check to see if this is true or not
-    public float gravityConst = -40f; // play around with this
-    private Vector3 _relPosition;
+    public float Gravitation = -9.8f;
+    private Rigidbody _rb; 
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        // rb.constraints = RigidbodyConstraints.FreezeRotation;
-        rb.useGravity = false;
+        _rb = GetComponent<Rigidbody>();
+        if (RotationLocked)
+        {
+            _rb.constraints = RigidbodyConstraints.FreezeRotation;
+        }
+        _rb.useGravity = false;
     }
 
     void FixedUpdate()
@@ -29,14 +33,15 @@ public class GravityRefactored : MonoBehaviour
 
     void Gravitate()
     {
-        // for direction of force
-        // this is pointing normal away from sphere
-        _relPosition = transform.position - attractor.position;
-
-        // F_g = m*g
-        float mass = rb.mass;
-        float forceMagnitude = mass * gravityConst;
-        Vector3 force = _relPosition.normalized * forceMagnitude;
-        rb.AddForce(force, ForceMode.Force); // continuous acceleration with mass
+        // relative position between me and my attractor
+        var relativePosition = (transform.position - attractor.position);
+        if (RotationLocked)
+        {
+            // Get relative rotation to my attractor
+            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, relativePosition.normalized) * transform.rotation;
+            // Slerp to new rotation
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
+        }
+        _rb.AddForce(relativePosition.normalized * _rb.mass * Gravitation, ForceMode.Force);
     }
 }

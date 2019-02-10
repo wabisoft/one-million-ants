@@ -50,6 +50,7 @@ public class Ship : MonoBehaviour
         MeshCombine(wing.gameObject);
 
         _numWings++;
+        gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     public void Attach(Nose nose)
@@ -67,6 +68,7 @@ public class Ship : MonoBehaviour
         MeshCombine(nose.gameObject);
 
         _hasNose = true;
+        gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     public void Attach(Nozzle nozzle)
@@ -85,6 +87,7 @@ public class Ship : MonoBehaviour
         MeshCombine(nozzle.gameObject);
 
         _hasNozzle = true;
+        gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }
 
 
