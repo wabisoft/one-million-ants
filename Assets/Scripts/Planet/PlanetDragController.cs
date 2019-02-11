@@ -20,8 +20,6 @@ public class PlanetDragController : MonoBehaviour
 
     void Update()
     {
-        // Debug.Log(_axis.magnitude);
-        // Debug.Log(_axis.ToString());
         if( _axis.magnitude != 0)
         {
             float deltaTheta = _angularVel * Time.deltaTime;
@@ -37,7 +35,6 @@ public class PlanetDragController : MonoBehaviour
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         Vector3? currentPoint = null;
-        
         if (Physics.Raycast(ray, out hit, 1000))
         {
             if (_previousPoint == null)
@@ -52,7 +49,6 @@ public class PlanetDragController : MonoBehaviour
             _theta = -1 * Vector3.SignedAngle(v1, v2, _axis);
 
             _angularVel = _theta/Time.deltaTime;
-            // Debug.Log(_angularVel);
             _camera.transform.RotateAround(this.transform.position, _axis, _theta);
         }
     }

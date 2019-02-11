@@ -50,4 +50,16 @@ public class Utilities
             arr[i] = new Vector3(arr[i - 1].x + step, arr[i - 1].y, arr[i - 1].z + step);
         }
     }
+
+
+    public static Planet SelectPlanet(GameObject target)
+    {
+        Planet p = null;
+        var minDist = float.PositiveInfinity;
+        foreach(var planet in GameObject.FindObjectsOfType<Planet>())
+        {
+            if ((target.transform.position - planet.transform.position).sqrMagnitude < minDist) { p = planet; }
+        }
+        return p;
+    }
 }
