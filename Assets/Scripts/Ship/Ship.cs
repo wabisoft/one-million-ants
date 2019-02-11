@@ -48,7 +48,6 @@ public class Ship : MonoBehaviour
         wing.transform.position += 1.5f * scalingFactor * wing.transform.up;
 
         MeshCombine(wing.gameObject);
-
         _numWings++;
         gameObject.GetComponent<Rigidbody>().isKinematic = false;
     }

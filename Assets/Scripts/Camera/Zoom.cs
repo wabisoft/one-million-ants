@@ -5,7 +5,7 @@ using UnityEngine;
 // just testing
 // this behavior should probably be in a UI element if it's fun
 
-public class zoomTest : MonoBehaviour
+public class Zoom : MonoBehaviour
 {
     private Camera _cam;
     // private bool _easingSwitch;

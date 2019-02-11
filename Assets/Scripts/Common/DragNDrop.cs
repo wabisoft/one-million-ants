@@ -2,33 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class DragNDrop : MonoBehaviour
 {
-    public SphereCollider sphere;
-    public float HeightMultiplier = 1.0f;
-    private Camera _camera;
-    private Rigidbody _rigidbody; 
-    private GravityRefactored _gravity;
-    private Vector3 _upDir { get { return transform.position - sphere.transform.position; } }
+    public float HeightMultiplier = 1.05f;
+    private Camera _camera {get {return Camera.main; }}
+    private Rigidbody _rigidbody { get { return GetComponent<Rigidbody>(); } } 
+    private Gravity _gravity { get { return GetComponent<Gravity>(); } }
+    private Vector3 _up { get { return transform.position - _planet.transform.position; } }
     private Vector3 _axis;
-    private float _sphereRadius { get { return sphere.radius * sphere.transform.localScale.x; } }
     private float _theta;
-    private bool _doUpdate = false;
-
-    void Start()
-    {
-        _camera = Camera.main;
-        _rigidbody = GetComponent<Rigidbody>();
-        _gravity = GetComponent<GravityRefactored>();
-    }
+    private Planet _planet;
 
     void OnMouseDown()
     {
+        _planet = Utilities.SelectPlanet(gameObject);
         _gravity.on = false;
-        _doUpdate = true;
-        transform.position += _upDir.normalized * HeightMultiplier;
+        transform.position += _up.normalized * HeightMultiplier;
         _rigidbody.velocity = Vector3.zero;
-        //_rigidbody.angularVelocity = Vector3.zero;
     }
 
     void OnMouseDrag()
@@ -39,39 +30,23 @@ public class DragNDrop : MonoBehaviour
         {
             if (hit.collider == GetComponent<Collider>())
             {
-                _doUpdate = false;
                 return;
             }
             else {
-                _doUpdate = true;
-                //_upDir = transform.position - sphere.transform.position;
-                var _hitPointRelVec = hit.point - sphere.transform.position;
-                _axis = Vector3.Cross(_upDir, _hitPointRelVec);
-                _theta = Vector3.SignedAngle(_upDir, _hitPointRelVec, _axis);
-                // needed for accurate physics, but it's too much for game
+                var _hitPointRelVec = hit.point - _planet.transform.position;
+                _axis = Vector3.Cross(_up, _hitPointRelVec);
+                _theta = Vector3.SignedAngle(_up, _hitPointRelVec, _axis);
+                transform.RotateAround(_planet.transform.position, _axis, _theta);
             } 
         }
-        else
-        {
-            _doUpdate = false;
-        }  
     }
+
     void OnMouseUp()
     {
 
         _gravity.on = true;
-        _doUpdate = false;
-        var tangentialVelocity = Vector3.Cross(_axis, transform.position - sphere.transform.position);
-        var orbitalVelocity = Mathf.Sqrt(Mathf.Abs(_gravity.Gravitation * 60 / _sphereRadius));
-        _rigidbody.velocity = Vector3.ClampMagnitude(tangentialVelocity, orbitalVelocity);
+        var tangentialVelocity = Vector3.Cross(_axis, transform.position - _planet.transform.position);
+        _rigidbody.velocity = Vector3.ClampMagnitude(tangentialVelocity, _planet.OrbitalVelocity);
     }
 
-    void FixedUpdate()
-    {
-        //_prevPos = transform.position;
-        if(_doUpdate)
-        {
-            transform.RotateAround(sphere.transform.position, _axis, _theta);
-        }
-    }
 }
