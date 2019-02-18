@@ -4,16 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class Vehicle : MonoBehaviour
+public abstract class Vehicle : MonoBehaviour
 {
 
     public float MaxSpeed = 3f; // Walking speed
     public float PathRadius = .05f;
     public int PathVertices = 100;
     public bool Steer = true;
-    public ComputePath PathDelegate = Utilities.ComputeSpiralPath;
-    private Vector3[] _path;
-    private Rigidbody _rigidbody { get { return GetComponent<Rigidbody>();  } }
+    protected Vector3[] _path;
+    protected Rigidbody _rigidbody { get { return GetComponent<Rigidbody>();  } }
     protected Planet _planet;
  
 
@@ -23,29 +22,40 @@ public class Vehicle : MonoBehaviour
         _rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         _rigidbody.useGravity = false;
         _path = new Vector3[PathVertices];
-        PathDelegate(ref _path, _planet.Sphere.center, _planet.Radius);
+        GeneratePath();
+        //PathDelegate(ref _path, _planet.Sphere.center, _planet.Radius);
         // pathDelegate(ref _path, new Vector3(-4.53f, 0.1f, -4.74f), 8.0f);
         DebugPath();
     }
 
-    // pass the canvasbounds -- bounds are hard coded
-    void FixedUpdate()
+    public void StopSteering()
     {
-        if (!Steer) {
-            _rigidbody.velocity = Vector3.zero;
-            return;
-        }
+        Steer = false;
+        _rigidbody.velocity = Vector3.zero;
+    }
+    
+    public void StartSteering()
+    {
+        Steer = true;
+    }
+
+    void FixedUpdate()
+    { 
 #if DEBUG
         for (int i = 1; i < PathVertices; i++)
             Debug.DrawLine(_path[i - 1], _path[i], Color.red);
 #endif
-
+        if (!Steer) {
+            return;
+        }
         if (_rigidbody.velocity == Vector3.zero)
         {
             _rigidbody.velocity += _rigidbody.transform.forward * MaxSpeed / 4.0f;
         }
         Path();
         _rigidbody.velocity = Vector3.ClampMagnitude(_rigidbody.velocity, MaxSpeed);
+        var targetRotation = Quaternion.FromToRotation(transform.forward, _rigidbody.velocity.normalized) * transform.rotation;
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
     }
 
     public void Seek(Vector3 target)
@@ -62,7 +72,6 @@ public class Vehicle : MonoBehaviour
 
     public void Arrive(Vector3 target)
     {
-        Debug.Log("Arrive");
         var target_offset = target - transform.position;
         var distance = Vector3.Distance(target, transform.position);
         var ramped_speed = MaxSpeed * (distance / PathRadius);
@@ -95,9 +104,9 @@ public class Vehicle : MonoBehaviour
         var b = pathSeg[1];
         var ab = b - a;
         var ap = p - a;
-        var o = a + Vector3.Project(ap, ab); // TEST TEST TEST
-        //var s = Vector3.Dot(ap, ab.normalized);
-        //var o = a + (s * ab.normalized);
+        // var o = a + Vector3.Project(ap, ab); // TEST TEST TEST
+        var s = Vector3.Dot(ap, ab.normalized);
+        var o = a + (s * ab.normalized);
         var e = Vector3.Distance(p, o);
         if (e >= PathRadius) {
             if (a == b) {
@@ -110,7 +119,15 @@ public class Vehicle : MonoBehaviour
         }
     }
 
-    private Vector3[] _pathingSegment(Vector3 point)
+    public void DebugPath()
+    {
+        for (int i = 1; i < _path.Length; i++)
+        {
+            Debug.DrawLine(_path[i - 1], _path[i], Color.red);
+        }
+    }
+
+    protected Vector3[] _pathingSegment(Vector3 point)
     {
         var min = float.MaxValue;
         var index = 0;
@@ -127,12 +144,5 @@ public class Vehicle : MonoBehaviour
         return new Vector3[] { _path[index], _path[index + 1] };
     }
 
-    void DebugPath()
-    {
-        for (int i = 1; i < _path.Length; i++)
-        {
-            Debug.DrawLine(_path[i - 1], _path[i], Color.red);
-        }
-    }
-
+    protected abstract void GeneratePath();
 }

@@ -22,14 +22,16 @@ public class DragNDrop : MonoBehaviour
         _gravity.on = false;
         transform.position += _up.normalized * HeightMultiplier;
         _rigidbody.velocity = Vector3.zero;
-        _vehicle.Steer = false;
+        if (_vehicle) {
+            _vehicle.StopSteering();
+        }
     }
     
     private RaycastHit? GetPlanetHit()
     {
         Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 1000)) {
+        var hits = Physics.RaycastAll(ray);
+        foreach (var hit in hits) {
             if (hit.collider as SphereCollider == _planet.Sphere) { return hit; }
         }
         return null;
@@ -52,7 +54,6 @@ public class DragNDrop : MonoBehaviour
         _gravity.on = true;
         var tangentialVelocity = Vector3.Cross(_axis, transform.position - _planet.transform.position);
         _rigidbody.velocity = Vector3.ClampMagnitude(tangentialVelocity, _planet.OrbitalVelocity);
-        _vehicle.Steer = true;
     }
 
 }

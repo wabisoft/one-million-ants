@@ -110,8 +110,7 @@ public class Ship : MonoBehaviour
         transform.GetComponent<MeshFilter>().mesh.CombineMeshes(combine);
         transform.GetComponent<MeshFilter>().mesh.RecalculateBounds();
         transform.GetComponent<MeshFilter>().mesh.RecalculateNormals();
-        transform.gameObject.AddComponent<MeshCollider>();
-        transform.gameObject.GetComponent<MeshCollider>().convex = true;
+        transform.gameObject.AddComponent<BoxCollider>();
         transform.gameObject.SetActive(true);
         Destroy(collisionObj);
     }

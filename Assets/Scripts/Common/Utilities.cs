@@ -24,21 +24,43 @@ public class Utilities
         }
     }
 
+    public static void ComputerAntiSpiralPath(ref Vector3[] arr, Vector3 center, float radius)
+    {
+        radius *= Epsilon;
+        float numberOfTurns = 5.0f;
+        float parameter = -radius;
+        float dparameter = 2 * radius / arr.Length;
+        for (int i = 0; i < arr.Length; i++)
+        {
+            var x = Mathf.Sqrt(Mathf.Pow(radius, 2.0f) - Mathf.Pow(parameter, 2.0f)) * Mathf.Cos(numberOfTurns * Mathf.PI * parameter / radius);
+            var z = Mathf.Sqrt(Mathf.Pow(radius, 2.0f) - Mathf.Pow(parameter, 2.0f)) * Mathf.Sin(numberOfTurns * Mathf.PI * parameter / radius);
+            arr[i] = new Vector3(
+                z,
+                parameter,
+                x
+            );
+            parameter += dparameter;
+        }
+    }
+
     public static void ComputeSpiralPath(ref Vector3[] arr, Vector3 center, float radius)
     {
         radius *= Epsilon;
         float numberOfTurns = 5.0f;
         float parameter = -radius;
-        float dparameter = -7.0f * (parameter / arr.Length);
+        float dparameter = 2 * radius / arr.Length;
         for (int i = 0; i < arr.Length; i++)
         {
+            var x = Mathf.Sqrt(Mathf.Pow(radius, 2.0f) - Mathf.Pow(parameter, 2.0f)) * Mathf.Cos(numberOfTurns * Mathf.PI * parameter / radius);
+            var z = Mathf.Sqrt(Mathf.Pow(radius, 2.0f) - Mathf.Pow(parameter, 2.0f)) * Mathf.Sin(numberOfTurns * Mathf.PI * parameter / radius);
             arr[i] = new Vector3(
-                Mathf.Sqrt(Mathf.Pow(radius, 2.0f) - Mathf.Pow(parameter, 2.0f)) * Mathf.Cos(numberOfTurns * Mathf.PI * parameter / radius),
+                x,
                 parameter,
-                Mathf.Sqrt(Mathf.Pow(radius, 2.0f) - Mathf.Pow(parameter, 2.0f)) * Mathf.Sin(numberOfTurns * Mathf.PI * parameter / radius)
+                z
             );
             parameter += dparameter;
         }
+        Debug.Log("bleh");
     }
 
     public static void ComputeStraightPath(ref Vector3[] arr, Vector3 start, float pathLength)
