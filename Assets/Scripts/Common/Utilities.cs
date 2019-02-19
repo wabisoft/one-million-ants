@@ -24,7 +24,7 @@ public class Utilities
         }
     }
 
-    public static void ComputerAntiSpiralPath(ref Vector3[] arr, Vector3 center, float radius)
+    public static void ComputeAntiSpiralPath(ref Vector3[] arr, Vector3 center, float radius)
     {
         radius *= Epsilon;
         float numberOfTurns = 5.0f;

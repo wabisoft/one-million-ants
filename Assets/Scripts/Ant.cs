@@ -34,6 +34,6 @@ public class Ant : Vehicle
 
     protected override void GeneratePath()
     {
-        Utilities.ComputerAntiSpiralPath(ref _path, _planet.Sphere.center, _planet.Radius);
+        Utilities.ComputeAntiSpiralPath(ref _path, _planet.Sphere.center, _planet.Radius);
     }
 }
