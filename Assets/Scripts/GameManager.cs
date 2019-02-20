@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public Planet Planet { get; private set; } 
-    public Base Base { get; private set; }
+    public GameObject Planet { get; private set; } 
+    public GameObject Base { get; private set; }
+    public List<GameObject> Ants { get; private set; }
 
     private void Awake()
     {
-        Planet = Utilities.SelectPlanet(gameObject);
-        Base = Instantiate(Base);
-
+        Planet = Instantiate(Resources.Load("Planet")) as GameObject;
+        
     }
 
     // Update is called once per frame

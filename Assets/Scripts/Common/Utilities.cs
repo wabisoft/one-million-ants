@@ -84,4 +84,15 @@ public class Utilities
         }
         return p;
     }
+
+
+    public static RaycastHit? GetPlanetHit(Planet planet)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var hits = Physics.RaycastAll(ray);
+        foreach (var hit in hits) {
+            if (hit.collider as SphereCollider == planet.Sphere) { return hit; }
+        }
+        return null;
+    }
 }

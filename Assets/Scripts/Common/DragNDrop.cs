@@ -27,19 +27,11 @@ public class DragNDrop : MonoBehaviour
         }
     }
     
-    private RaycastHit? GetPlanetHit()
-    {
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        var hits = Physics.RaycastAll(ray);
-        foreach (var hit in hits) {
-            if (hit.collider as SphereCollider == _planet.Sphere) { return hit; }
-        }
-        return null;
-    }
+  
 
     void OnMouseDrag()
     {
-        var hit = GetPlanetHit();
+        var hit = Utilities.GetPlanetHit(_planet);
         if (hit.HasValue) {
             _previousPos = hit.Value.point;
             var _hitPointRelVec = hit.Value.point - _planet.transform.position;
@@ -52,7 +44,11 @@ public class DragNDrop : MonoBehaviour
     void OnMouseUp()
     {
         _gravity.on = true;
-        var tangentialVelocity = Vector3.Cross(_axis, transform.position - _planet.transform.position);
+        // var tangentialVelocity = Vector3.Cross(_axis, transform.position - _planet.transform.position);
+        var relpos = transform.position - _planet.transform.position;
+
+        var _omega = _theta * _axis.normalized; // really this should be deltaTheta/deltaTime but that didn't give me the behavior I want. \_(?)_/
+        var tangentialVelocity = Vector3.Cross(_omega, relpos);
         _rigidbody.velocity = Vector3.ClampMagnitude(tangentialVelocity, _planet.OrbitalVelocity);
     }
 

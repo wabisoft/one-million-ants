@@ -19,4 +19,5 @@ public class Planet : MonoBehaviour
     {
         OrbitalVelocity = Mathf.Sqrt(Mathf.Abs(Globals.Gravitation * Mass / Radius)); // cache this to avoid using sqrt every fixed update
     }
+
 }

@@ -32,17 +32,16 @@ public class PlanetDragController : MonoBehaviour
 
     public void OnMouseDrag()
     {
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
+        var hit = Utilities.GetPlanetHit(GetComponent<Planet>());
         Vector3? currentPoint = null;
-        if (Physics.Raycast(ray, out hit, 1000))
+        if (hit.HasValue)
         {
             if (_previousPoint == null)
             {
-                _previousPoint = hit.point;
+                _previousPoint = hit.Value.point;
                 return;
             }
-            else currentPoint = hit.point;
+            else currentPoint = hit.Value.point;
             Vector3 v1 = _previousPoint.Value - this.transform.position;
             Vector3 v2 = currentPoint.Value - this.transform.position;
             _axis = Vector3.Cross(v1, v2);
