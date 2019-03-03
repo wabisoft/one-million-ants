@@ -9,7 +9,7 @@ public class Base : MonoBehaviour
     private void Update()
     {
         if (HP <= 0) {
-            Debug.Log("GAME OVER");
+            //Debug.Log("GAME OVER");
         }
     }
 

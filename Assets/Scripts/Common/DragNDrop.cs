@@ -23,7 +23,7 @@ public class DragNDrop : MonoBehaviour
         transform.position += _up.normalized * HeightMultiplier;
         _rigidbody.velocity = Vector3.zero;
         if (_vehicle) {
-            _vehicle.StopSteering();
+            // _vehicle.StopSteering();
         }
     }
     
