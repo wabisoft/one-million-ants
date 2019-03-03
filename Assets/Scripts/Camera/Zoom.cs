@@ -8,27 +8,47 @@ using UnityEngine;
 public class Zoom : MonoBehaviour
 {
     private Camera _cam;
-    // private bool _easingSwitch;
-    // Start is called before the first frame update
+    private float _FOVDifference;
+    private float _startFOV;
+    private float timeStep;
+    private float val;
+
     void Start()
     {
         _cam = Camera.main;
-        // _easingSwitch = true;
+        timeStep = 0.0f;
+        val = 0.0f;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void zoomIn()
     {
-        // right click
-        if (Input.GetMouseButtonDown(1))
+        _FOVDifference = _cam.fieldOfView - 0.75f * _cam.fieldOfView;
+        _startFOV = _cam.fieldOfView;
+
+        while(timeStep < 1)
         {
-            // float targetFieldOfView = _cam.fieldOfView * 0.75f;
-            // float diff = _cam.fieldOfView - targetFieldOfView;
-            _cam.fieldOfView *= .75f;
+            val = _FOVDifference * Mathf.Sqrt(timeStep);
+            _cam.fieldOfView = _startFOV - val;
+            // timeStep += 0.02f;
+            timeStep += Time.deltaTime;
         }
-        if (Input.GetMouseButtonDown(2))
+
+        timeStep = 0.0f;
+    }
+
+    public void zoomOut()
+    {
+        _FOVDifference = 1.33f * _cam.fieldOfView - _cam.fieldOfView;
+        _startFOV = _cam.fieldOfView;
+        
+        while(timeStep < 1)
         {
-            _cam.fieldOfView *= 1.33f;
+            val = _FOVDifference * Mathf.Sqrt(timeStep);
+            _cam.fieldOfView = _startFOV + val;
+            // timeStep += 0.02f;
+            timeStep += Time.deltaTime;
         }
+
+        timeStep = 0.0f;
     }
 }
