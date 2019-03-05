@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Nozzle : MonoBehaviour, IShipPart
+public class Nozzle : ShipPartBase
 {
-    public void Combine(Ship ship)
+    public override void Combine(Ship ship)
     {
         ship.Attach(this);
     }

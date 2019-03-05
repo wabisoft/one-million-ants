@@ -15,6 +15,12 @@ public class Ship : MonoBehaviour
     private bool _hasNose = false;
     private bool _hasNozzle = false;
     private float scalingFactor;
+    public bool Complete
+    {
+        get {
+            return MaxWings == 4 && _hasNose && _hasNozzle;
+        }
+    }
 
     void Start()
     {
@@ -29,6 +35,8 @@ public class Ship : MonoBehaviour
             p.Combine(this);
         }
     }
+
+    
 
     public void Attach(Wing wing)
     {

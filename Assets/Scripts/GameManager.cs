@@ -10,11 +10,13 @@ public class GameManager : MonoBehaviour
     private Light _sun;
     public List<Ant> AntPool;
     public Transform AntSpawn1;
+    public Ship Ship { get; private set; }
     private float timeSinceLastAntSpawned = 0;
 
     private void Awake()
     {
         Planet = Utilities.SelectPlanet(gameObject);
+        Ship = FindObjectOfType<Ship>();
         AntPool = new List<Ant>();
         _sun = FindObjectOfType<Light>();
         InitAntPool();
@@ -33,10 +35,8 @@ public class GameManager : MonoBehaviour
     void SpawnAnt(Vector3 pos)
     {
         for (int i = 0; i < MaxConcurrentAnts; i++) {
-            if (!AntPool[i].gameObject.activeInHierarchy) {
-                AntPool[i].gameObject.SetActive(true);
-                AntPool[i].transform.position = pos;
-                return;
+            if (!AntPool[i].Active) {
+                AntPool[i].Spawn(pos);
             }
         }
     }
@@ -51,5 +51,9 @@ public class GameManager : MonoBehaviour
         } else {
             timeSinceLastAntSpawned += Time.deltaTime;
         }
+
+        //if (Ship.Complete) {
+        //    Debug.Log("Yay");
+        //}
     }
 }

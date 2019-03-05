@@ -9,6 +9,7 @@ public class Ant : Vehicle
     private Vector3[] _path;
     public int PathVertices = 100;
     public GameManager GameManager;
+    public bool Active { get { return gameObject.activeInHierarchy; } }
 
     void Start()
     {
@@ -61,7 +62,18 @@ public class Ant : Vehicle
     {
         gameObject.SetActive(false);
     }
- 
+
+    public void Spawn(Vector3 pos)
+    {
+        gameObject.SetActive(true);
+        transform.position = pos;
+    }
+
+    //public void OnMouseDown()
+    //{
+    //    Die();        
+    //}
+
     public void DebugPath()
     {
         for (int i = 1; i < _path.Length; i++)
