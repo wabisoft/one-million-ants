@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 7041374851189274653}
   - component: {fileID: 7041374851189274651}
   - component: {fileID: 7041374851189274625}
-  - component: {fileID: 7041374851189274655}
+  - component: {fileID: 8810265220143981290}
   - component: {fileID: 4273837822765201233}
   m_Layer: 0
   m_Name: Ant
@@ -500,7 +500,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxSpeed: 3
   PathRadius: 0.1
-  Active: 0
   Damage: 1
   PathVertices: 500
   GameManager: {fileID: 0}
@@ -518,7 +517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RotationLocked: 1
   on: 1
---- !u!114 &7041374851189274655
+--- !u!114 &8810265220143981290
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -527,10 +526,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7041374851189274650}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78e6839c3165b4d48bd761dd295ab929, type: 3}
+  m_Script: {fileID: 11500000, guid: 63d9641a4b83ffd43b361a4a6cd9a8f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HeightMultiplier: 1.05
 --- !u!136 &4273837822765201233
 CapsuleCollider:
   m_ObjectHideFlags: 0

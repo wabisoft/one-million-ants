@@ -123,6 +123,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Nozzle
       objectReference: {fileID: 0}
+    - target: {fileID: 1656319446, guid: 4e86ffc7f02ad2d42adf44ba670a72e7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1656319453, guid: 4e86ffc7f02ad2d42adf44ba670a72e7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -180,6 +184,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wing (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 754527367, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 754527375, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.18
@@ -236,6 +244,10 @@ PrefabInstance:
     - target: {fileID: 514449728, guid: 76e440f2de829b145b0e6e6eae412237, type: 3}
       propertyPath: m_Name
       value: Body
+      objectReference: {fileID: 0}
+    - target: {fileID: 514449728, guid: 76e440f2de829b145b0e6e6eae412237, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 514449733, guid: 76e440f2de829b145b0e6e6eae412237, type: 3}
       propertyPath: m_LocalPosition.x
@@ -324,6 +336,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Head
       objectReference: {fileID: 0}
+    - target: {fileID: 818615193, guid: 2ebc9b8fed09e7d49a6751fbb6d42092, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 818615201, guid: 2ebc9b8fed09e7d49a6751fbb6d42092, type: 3}
       propertyPath: m_LocalPosition.x
       value: 17.19
@@ -380,6 +396,10 @@ PrefabInstance:
     - target: {fileID: 754527367, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
       propertyPath: m_Name
       value: Wing (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 754527367, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 754527375, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -512,6 +532,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wing
       objectReference: {fileID: 0}
+    - target: {fileID: 754527367, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 754527375, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.18
@@ -568,6 +592,10 @@ PrefabInstance:
     - target: {fileID: 754527367, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
       propertyPath: m_Name
       value: Wing (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 754527367, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 754527375, guid: 576c1a2a805877241a180bbfd0fa3af0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -750,7 +778,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1480139317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763,7 +791,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 699684bff026a924981458f1765b636b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxConcurrentAnts: 10
+  MaxConcurrentAnts: 100
+  SpawnTime: 1
   AntPool: []
   AntSpawn1: {fileID: 462363603}
 --- !u!4 &1480139318

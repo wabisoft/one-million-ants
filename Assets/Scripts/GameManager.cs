@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public int MaxConcurrentAnts = 10;
+    public int MaxConcurrentAnts = 100;
+    public float SpawnTime = 1.0f;
     public Planet Planet { get; private set; } 
     public Base Base { get; private set; }
     private Light _sun;
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < MaxConcurrentAnts; i++) {
             if (!AntPool[i].Active) {
                 AntPool[i].Spawn(pos);
+                return;
             }
         }
     }
@@ -45,7 +47,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         _sun.transform.RotateAround(Planet.transform.position, Vector3.up, Time.deltaTime); // make it look like time passing with moving sun (geocentric theory 4 lyfe), fuck copernicus!
-        if (timeSinceLastAntSpawned > 2) {
+        if (timeSinceLastAntSpawned > SpawnTime) {
             SpawnAnt(AntSpawn1.position);
             timeSinceLastAntSpawned = 0;
         } else {
