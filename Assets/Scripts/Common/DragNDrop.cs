@@ -14,7 +14,28 @@ public class DragNDrop : MonoBehaviour
     private Vector3 _axis;
     private float _theta;
     private Planet _planet;
+    public Planet Planet
+    {
+        get {
+            if (!_planet) {
+                _planet = Utilities.SelectPlanet(gameObject);
+            }
+            return _planet;
+        }
+        set {
+            _planet = value;
+        }
+    }
     private Vector3 _previousPos;
+
+    //private void FixedUpdate()
+    //{
+    //    if ((transform.position - Planet.Sphere.transform.position).sqrMagnitude <= Mathf.Pow(Planet.Radius, 2) * 1.01f) {
+    //        _rigidbody.isKinematic = true;
+    //    } else {
+    //        _rigidbody.isKinematic = false;
+    //    }
+    //}
 
     void OnMouseDown()
     {
@@ -25,9 +46,7 @@ public class DragNDrop : MonoBehaviour
         if (_vehicle) {
             // _vehicle.StopSteering();
         }
-    }
-    
-  
+    }  
 
     void OnMouseDrag()
     {
@@ -52,4 +71,8 @@ public class DragNDrop : MonoBehaviour
         _rigidbody.velocity = Vector3.ClampMagnitude(tangentialVelocity, _planet.OrbitalVelocity);
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(transform.position, 0.02f);
+    }
 }

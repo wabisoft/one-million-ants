@@ -8,7 +8,6 @@ public class SteeringBehavior
     private Vehicle Vehicle;
     private SteeringBehavior() { } // private default ctor
 
-
     public bool On = false;
 
     public SteeringBehavior(Vehicle v)
@@ -31,8 +30,10 @@ public class SteeringBehavior
         return desired_velocity - Vehicle.Velocity;
     }
 
+
     protected Vector3[] PathingSegment(Vector3 point, ref Vector3[] path)
     {
+        UnityEngine.Profiling.Profiler.BeginSample("PathSegment");
         var min = float.MaxValue;
         var index = 0;
         for (var i = 0; i < path.Length; i++) {
@@ -45,11 +46,13 @@ public class SteeringBehavior
         if (index + 1 >= path.Length) {
             return new Vector3[] { path[index], path[index] };
         }
+        UnityEngine.Profiling.Profiler.EndSample();
         return new Vector3[] { path[index], path[index + 1] };
     }
 
     public Vector3? Path(ref Vector3 [] path)
     {
+        UnityEngine.Profiling.Profiler.BeginSample("Path");
         // returns a steering force for following a path
         // now we have a few relative vectors to work with
         /*
@@ -75,6 +78,7 @@ public class SteeringBehavior
         var s = Vector3.Dot(ap, ab.normalized);
         var o = a + (s * ab.normalized);
         var e = Vector3.Distance(p, o);
+        UnityEngine.Profiling.Profiler.EndSample();
         if (e >= Vehicle.PathRadius) {
             if (a == b) {
                 return Arrive(a);

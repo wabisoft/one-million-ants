@@ -1,24 +1,16 @@
 fileFormatVersion: 2
-guid: a4e24b3385b6c480fad11f89768d1ce4
+guid: de1af0db600dbbe4b91b81253f644a13
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Camera
-    100004: Lamp
-    100006: Wing1
     400000: //RootNode
-    400002: Camera
-    400004: Lamp
-    400006: Wing1
-    2000000: Camera
     2100000: Red
     2300000: //RootNode
-    2300002: Wing1
     3300000: //RootNode
-    3300002: Wing1
     4300000: Wing1
-    10800000: Lamp
+    7400000: Default Take
+    9500000: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -72,7 +64,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
     previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
@@ -99,7 +91,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 

@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 8810265220143981290}
   - component: {fileID: 4273837822765201233}
   m_Layer: 0
-  m_Name: Ant
+  m_Name: SpiralAnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -495,13 +495,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7041374851189274650}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 626cf2d42f0e67a498b844d958eb67b5, type: 3}
+  m_Script: {fileID: 11500000, guid: 81f931e3f0556fb4080deca026b5ece3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MaxSpeed: 3
-  PathRadius: 0.1
+  PathRadius: 0.05
   Damage: 1
-  PathVertices: 500
+  PathVertices: 100
   GameManager: {fileID: 0}
 --- !u!114 &7041374851189274625
 MonoBehaviour:

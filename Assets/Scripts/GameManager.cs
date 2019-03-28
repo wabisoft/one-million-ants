@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     {
         Planet = Utilities.SelectPlanet(gameObject);
         Ship = FindObjectOfType<Ship>();
+        Base = FindObjectOfType<Base>();
         AntPool = new List<Ant>();
         _sun = FindObjectOfType<Light>();
         InitAntPool();
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
     void InitAntPool()
     {
         for (int i = 0; i < MaxConcurrentAnts; i++) {
-            var ant = (Instantiate(Resources.Load("Ant")) as GameObject).GetComponent<Ant>();
+            var ant = (Instantiate(Resources.Load("SpiralAnt")) as GameObject).GetComponent<Ant>();
             ant.gameObject.SetActive(false);
             ant.GameManager = this;
             AntPool.Add(ant);
@@ -53,9 +54,12 @@ public class GameManager : MonoBehaviour
         } else {
             timeSinceLastAntSpawned += Time.deltaTime;
         }
+        
 
-        //if (Ship.Complete) {
-        //    Debug.Log("Yay");
-        //}
+        if (Ship.Complete) {
+            Debug.Log("Yay");
+        } else if (Base.HP <= 0){
+            Debug.Log("You loose");
+        }
     }
 }

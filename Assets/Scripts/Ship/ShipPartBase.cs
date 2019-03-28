@@ -14,6 +14,7 @@ public abstract class ShipPartBase : MonoBehaviour, IShipPart
         }
     }
 
+
     private void Start()
     {
         var spawn = Planet.Random();
@@ -24,6 +25,7 @@ public abstract class ShipPartBase : MonoBehaviour, IShipPart
         spawn += transform.up.normalized * transform.localScale.y;
         transform.position = spawn;
     }
+    
 
     public abstract void Combine(Ship ship);
 }

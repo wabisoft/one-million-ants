@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Gravity))]
-public class Ant : Vehicle
+public abstract class Ant : Vehicle
 {
     public float Damage = 1;
-    private Vector3[] _path;
+    protected static Vector3[] _path = null;
     public int PathVertices = 100;
     public GameManager GameManager;
     public bool Active { get { return gameObject.activeInHierarchy; } }
@@ -17,7 +17,6 @@ public class Ant : Vehicle
         Planet = Utilities.SelectPlanet(gameObject);
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         Rigidbody.useGravity = false;
-        _path = new Vector3[PathVertices];
         GeneratePath();
         // transform.position = _path[0];
     }
@@ -27,7 +26,7 @@ public class Ant : Vehicle
         Rigidbody.MovePosition(_path[0] + transform.up.normalized);
     } 
 
-    void FixedUpdate() {
+    void Update() {
         if (!Grounded()) {
             return;
         }
@@ -51,11 +50,6 @@ public class Ant : Vehicle
     public void Attack(Base b)
     {
         b.HP -= Damage;
-    }
-
-    protected override void GeneratePath()
-    {
-        Utilities.ComputeAntiSpiralPath(ref _path, Planet.Sphere.center, Planet.Radius);
     }
 
     public void Die()
