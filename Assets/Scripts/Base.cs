@@ -22,4 +22,11 @@ public class Base : MonoBehaviour
         }
         
     }
+
+    public List<Vector3> PathToMeFromPoint(Vector3 point)
+    {
+        var ret = new List<Vector3>();
+        
+        return ret;
+    }
 }

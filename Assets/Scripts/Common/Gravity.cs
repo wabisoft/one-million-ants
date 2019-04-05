@@ -45,7 +45,5 @@ public class Gravity : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
         }
         _rb.AddForce(relativePosition.normalized * _rb.mass * Globals.Gravitation, ForceMode.Force);
-    }
-
-    
+    }    
 }
