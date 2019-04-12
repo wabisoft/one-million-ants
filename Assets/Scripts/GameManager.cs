@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < MaxConcurrentAnts; i++) {
             var ant = (Instantiate(Resources.Load("SpiralAnt")) as GameObject).GetComponent<Ant>();
             ant.gameObject.SetActive(false);
-            ant.GameManager = this;
+            // ant.GameManager = this;
             AntPool.Add(ant);
         }
     }

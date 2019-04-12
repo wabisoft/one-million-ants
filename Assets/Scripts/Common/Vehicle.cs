@@ -3,23 +3,15 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public abstract class Vehicle : MonoBehaviour
+public abstract class Vehicle : PlanetaryBody
 {
 
     public float MaxSpeed = 3f; // Walking speed
-    public float PathRadius = .05f;
-    public Rigidbody Rigidbody { get { return GetComponent<Rigidbody>();  } }
-    private Planet _planet;
-    public Planet Planet {
+    public float PathRadius = .6f;
+    public float ArriveRadius = 0.4f;
+    public float SquaredPathRadius { 
         get {
-            if (!_planet) {
-                _planet = Utilities.SelectPlanet(gameObject);
-            }
-            return _planet;
-        }
-        set {
-            _planet = value;
+            return Mathf.Pow(PathRadius, 2);
         }
     }
     
@@ -27,12 +19,6 @@ public abstract class Vehicle : MonoBehaviour
     {
         get { return Rigidbody.velocity;  }
         protected set { Rigidbody.velocity = value;  }
-    }
-
-    public Vector3 Position 
-    {
-        get { return transform.position; }
-        //set { transform.position = value; }
     }
 
     private SteeringBehavior _steering;
@@ -52,21 +38,31 @@ public abstract class Vehicle : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
     }
 
+    public void FaceRight()
+    {
+        var targetRotation = Quaternion.FromToRotation(transform.right, Velocity.normalized) * transform.rotation;
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
+    }
+
+    public void FaceLeft()
+    {
+        var targetRotation = Quaternion.FromToRotation(-1 * transform.right, Velocity.normalized) * transform.rotation;
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
+    }
+
+    public void FaceBack()
+    {
+        var targetRotation = Quaternion.FromToRotation(-1 * transform.forward, Velocity.normalized) * transform.rotation;
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
+    }
+
     public void ClampSpeed()
     {
-        Rigidbody.velocity = Vector3.ClampMagnitude(Rigidbody.velocity, MaxSpeed);
+        Velocity = Vector3.ClampMagnitude(Velocity, MaxSpeed);
     }
 
-    public bool Grounded()
+    public void DebugVelocity(int timeStep = 2)
     {
-        var sqrDistToPlanet = (Position - Planet.transform.position).sqrMagnitude;
-        var sqrGroundedDist = Mathf.Pow(Planet.Radius + transform.localScale.y * 1.6f, 2); 
-        if (sqrDistToPlanet > sqrGroundedDist) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    protected abstract void GeneratePath();
+        Debug.DrawLine(transform.position, transform.position + Velocity * timeStep, Color.magenta); 
+    }   
 }

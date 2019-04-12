@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Gravity))]
 public abstract class Ant : Vehicle
 {
     public float Damage = 1;
-    protected static Vector3[] _path = null;
-    public int PathVertices = 100;
-    public GameManager GameManager;
+    protected List<Vector3> _path = null;
     public bool Active { get { return gameObject.activeInHierarchy; } }
 
     void Start()
@@ -17,34 +14,25 @@ public abstract class Ant : Vehicle
         Planet = Utilities.SelectPlanet(gameObject);
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         Rigidbody.useGravity = false;
-        GeneratePath();
         // transform.position = _path[0];
     }
 
-    public void EnterScene()
-    {
-        Rigidbody.MovePosition(_path[0] + transform.up.normalized);
-    } 
+    // public void EnterScene()
+    // {
+    //     Rigidbody.MovePosition(_path[0] + transform.up.normalized);
+    // } 
 
     void Update() {
+        DebugVelocity();
         if (!Grounded()) {
+            Gravitate();
             return;
         }
-
-        //if (Rigidbody.velocity == Vector3.zero) {
-        //    Rigidbody.velocity += Rigidbody.transform.forward * MaxSpeed / 4.0f;
-        //}
-        Rigidbody.velocity += Rigidbody.transform.forward * MaxSpeed / 4.0f;
-        var steeringForce = Steering.Path(ref _path);
-        if (steeringForce.HasValue) {
-            Debug.DrawLine(Position, Position + Velocity, Color.red);
-            Debug.DrawLine(Position, Position + steeringForce.Value, Color.green);
-            Debug.DrawLine(Position, Position + transform.forward, Color.black);
-            Velocity += steeringForce.Value;
-        }
+       // StayUp();
+       // StayGrounded();
+        Path();
         ClampSpeed();
-        FaceFront();
-        DebugPath();
+        NormalizeMovement();
     }
 
     public void Attack(Base b)
@@ -63,16 +51,16 @@ public abstract class Ant : Vehicle
         transform.position = pos;
     }
 
-    //public void OnMouseDown()
-    //{
-    //    Die();        
-    //}
-
-    public void DebugPath()
+    public void DebugPath(List<Vector3> path)
     {
-        for (int i = 1; i < _path.Length; i++)
+        for (int i = 1; i < path.Count; i++)
         {
-            Debug.DrawLine(_path[i - 1], _path[i], Color.red);
+            Debug.DrawLine(path[i - 1], path[i], Color.red);
         }
     } 
+
+    protected abstract void Path();
+
+    protected abstract void NormalizeMovement();
+
 }

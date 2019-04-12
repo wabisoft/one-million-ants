@@ -1,19 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class ShipPartBase : MonoBehaviour, IShipPart
+public abstract class ShipPartBase : PlanetaryBody, IShipPart
 {
-    private Planet _planet;
-    public Planet Planet { get {
-            if (_planet == null) {
-                _planet = Utilities.SelectPlanet(gameObject);
-            }
-            return _planet;
-        } set {
-            _planet = value;
-        }
-    }
-
 
     private void Start()
     {

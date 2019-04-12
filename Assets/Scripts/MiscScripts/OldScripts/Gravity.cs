@@ -5,6 +5,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+// public static class Gravity
+// {
+// 
+//         
+//        
+// }
+
 [RequireComponent(typeof(Rigidbody))]
 public class Gravity : MonoBehaviour
 {
@@ -44,6 +51,7 @@ public class Gravity : MonoBehaviour
             // Slerp to new rotation
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
         }
+
         _rb.AddForce(relativePosition.normalized * _rb.mass * Globals.Gravitation, ForceMode.Force);
     }    
 }
