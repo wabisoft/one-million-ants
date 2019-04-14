@@ -77,11 +77,11 @@ public class PlanetaryBody : MonoBehaviour
         {
             StayUp();
         }
-        var force_mag = (RelativeToPlanet.magnitude - Planet.Radius) / (int)SteeringBehavior.Deceleration.fast * 0.3f;
+        // var force_mag = (RelativeToPlanet.magnitude - Planet.Radius) / (int)SteeringBehavior.Deceleration.fast * 0.3f;
 #if DEBUG
         Debug.DrawLine(transform.position, transform.position + down * 2, Color.black);
 #endif
-        var force = down * Rigidbody.mass * Globals.Gravitation * force_mag;
+        var force = down * Rigidbody.mass * Globals.Gravitation;
         Rigidbody.AddForce(force, ForceMode.Force);
     }
 

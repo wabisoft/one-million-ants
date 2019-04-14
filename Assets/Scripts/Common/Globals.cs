@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Globals 
 {
-    public const float Gravitation = -40f;
+    public const float Gravitation = 40f;
 }

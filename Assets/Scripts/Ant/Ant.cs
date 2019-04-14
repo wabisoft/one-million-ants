@@ -7,6 +7,7 @@ public abstract class Ant : Vehicle
     public float Damage = 1;
     protected List<Vector3> _path = null;
     public bool Active { get { return gameObject.activeInHierarchy; } }
+    public Stack<IState<Ant>> States;
 
     void Start()
     {
@@ -14,7 +15,35 @@ public abstract class Ant : Vehicle
         Planet = Utilities.SelectPlanet(gameObject);
         Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         Rigidbody.useGravity = false;
+        States = new Stack<IState<Ant>>();
+        States.Push(AntStates.Standing);
         // transform.position = _path[0];
+    }
+
+    private void Update()
+    {
+        States.Peek().Update(this);
+        Debug.Log(States.Peek().ToString());
+    }
+
+    private void OnMouseDown()
+    { 
+        States.Peek().OnMouseDown(this);
+    }
+
+    private void OnMouseDrag()
+    {
+        States.Peek().OnMouseDrag(this);
+    }
+
+    private void OnMouseUp()
+    {
+        States.Peek().OnMouseUp(this);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        States.Peek().OnCollisionEnter(this, collision);
     }
 
     // public void EnterScene()
@@ -22,18 +51,17 @@ public abstract class Ant : Vehicle
     //     Rigidbody.MovePosition(_path[0] + transform.up.normalized);
     // } 
 
-    void Update() {
-        DebugVelocity();
-        if (!Grounded()) {
-            Gravitate();
-            return;
-        }
-       // StayUp();
-       // StayGrounded();
-        Path();
-        ClampSpeed();
-        NormalizeMovement();
-    }
+    // void Update() {
+    //    if (!Grounded()) {
+    //        Gravitate();
+    //        return;
+    //    }
+    //   // StayUp();
+    //   // StayGrounded();
+    //    Path();
+    //    ClampSpeed();
+    //    NormalizeMovement();
+    // }
 
     public void Attack(Base b)
     {

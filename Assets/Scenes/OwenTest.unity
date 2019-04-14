@@ -406,20 +406,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!136 &697838539975974064
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6005406829563433979}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 1.19
-  m_Height: 4.7
-  m_Direction: 2
-  m_Center: {x: 0, y: 1.22, z: 0.53}
 --- !u!137 &6005406829549838011
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -1169,7 +1155,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6005406829563433979}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 9.26, z: -6.29}
+  m_LocalPosition: {x: 0, y: 1.06, z: -11.6}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 6005406829563269019}
@@ -1687,20 +1673,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &6005406829563433952
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6005406829563433979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ce58fd234b0545e0a50b645e482a821, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  RotationLocked: 1
-  on: 1
 --- !u!1 &6005406829563433953
 GameObject:
   m_ObjectHideFlags: 0
@@ -1920,10 +1892,8 @@ GameObject:
   - component: {fileID: 6005406829563269083}
   - component: {fileID: 6005406829553918075}
   - component: {fileID: 6005406829563433980}
-  - component: {fileID: 6005406829563433952}
-  - component: {fileID: 697838539975974064}
   - component: {fileID: 6005406829563433982}
-  - component: {fileID: 6005406829563433984}
+  - component: {fileID: 6005406829563433985}
   m_Layer: 0
   m_Name: SpiralAnt
   m_TagString: Untagged
@@ -1975,6 +1945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd9c03f8b228f74448ce45767ae2abef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RotationLocked: 1
   MaxSpeed: 3
   PathRadius: 0.6
   ArriveRadius: 0.4
@@ -1996,16 +1967,16 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &6005406829563433984
-MonoBehaviour:
+--- !u!65 &6005406829563433985
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6005406829563433979}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 78e6839c3165b4d48bd761dd295ab929, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HeightMultiplier: 1.05
+  serializedVersion: 2
+  m_Size: {x: 1.55, y: 1.43, z: 5.5}
+  m_Center: {x: 0, y: 1, z: 0}

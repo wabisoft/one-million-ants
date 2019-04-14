@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public abstract class Vehicle : PlanetaryBody
+public abstract class Vehicle : PlanetaryBody 
 {
 
     public float MaxSpeed = 3f; // Walking speed

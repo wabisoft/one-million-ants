@@ -80,4 +80,5 @@ public class DirectAnt: Ant
             Velocity = transform.forward * Velocity.magnitude;
         }
     }
+
 }
