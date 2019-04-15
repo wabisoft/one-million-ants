@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public abstract class ShipPartBase : PlanetaryBody, IShipPart
@@ -13,6 +13,7 @@ public abstract class ShipPartBase : PlanetaryBody, IShipPart
         transform.rotation = targetRotation;
         spawn += transform.up.normalized * transform.localScale.y;
         transform.position = spawn;
+        
     }
     
 

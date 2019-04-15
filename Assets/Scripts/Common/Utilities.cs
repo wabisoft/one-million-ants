@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -60,7 +61,6 @@ public class Utilities
             );
             parameter += dparameter;
         }
-        Debug.Log("bleh");
     }
 
     public static void ComputeStraightPath(ref Vector3[] arr, Vector3 start, float pathLength)
@@ -94,5 +94,23 @@ public class Utilities
             if (hit.collider as SphereCollider == planet.Sphere) { return hit; }
         }
         return null;
+
+    }
+
+    public static void DebugPath(List<Vector3> path)
+    {
+        for (int i = 1; i < path.Count; i++)
+        {
+            Debug.DrawLine(path[i - 1], path[i], Color.red);
+        }
+    }
+
+    public static Vector3 SphericalToCartesian(float radius, float theta, float phi)
+    {
+        return new Vector3(
+            radius * Mathf.Sin(theta) * Mathf.Cos(phi),
+            radius * Mathf.Cos(theta),
+            radius * Mathf.Sin(theta) * Mathf.Sin(phi)
+        );
     }
 }

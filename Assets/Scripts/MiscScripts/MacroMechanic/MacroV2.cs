@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,7 +57,6 @@ public class MacroV2 : MonoBehaviour
 
             if(collision.gameObject.CompareTag("Head") &&  headSlot == true)
             {
-                Debug.Log("Blah");
                 gameObject.GetComponent<Rigidbody>().isKinematic = true;
                 gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 Destroy(GetComponent<MeshCollider>());

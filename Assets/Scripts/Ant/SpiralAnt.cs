@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class SpiralAnt : Ant
@@ -12,12 +12,12 @@ public class SpiralAnt : Ant
     }
 
     
-    protected override void Path()
+    public override void Path()
     {
 
     }
 
-    protected override void NormalizeMovement()
+    public override void NormalizeMovement()
     {
 
     }

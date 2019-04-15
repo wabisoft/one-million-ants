@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -61,7 +61,7 @@ public class SteeringBehavior
     //    return new Vector3[] { path[index], path[index + 1] };
     //}
 
-    public Vector3? Path(Vector3 a, Vector3 b)
+    public Vector3 Path(Vector3 a, Vector3 b)
     {
         // returns a steering force for following a path
         // now we have a few relative vectors to work with
@@ -78,14 +78,13 @@ public class SteeringBehavior
         */
         float dtCoefficient = 5;
         float dt = Time.deltaTime * dtCoefficient;
-        // float dt = Time.deltaTime * ;
         var p = Vehicle.transform.position + Vehicle.Velocity * dt;
         var ab = b - a;
         var ap = p - a;
         // var o = a + Vector3.Project(ap, ab); // TEST TEST TEST
         var s = Vector3.Dot(ap, ab.normalized);
         var o = a + (s * ab.normalized);
-        if ((p-o).sqrMagnitude >= Vehicle.SquaredPathRadius || Vector3.Angle(ab, ap) >= 15) {
+        if ((p-o).sqrMagnitude >= Vehicle.SquaredPathRadius) {
             if (a == b || (a-b).sqrMagnitude < Mathf.Pow(Vehicle.ArriveRadius, 2) ){
                 return Arrive(b);
             }
@@ -94,7 +93,7 @@ public class SteeringBehavior
                 return Seek(d);
             }
         }
-        return null;
+        return Seek(b);
     }
 
 

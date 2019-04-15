@@ -5,8 +5,20 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class PlanetaryBody : MonoBehaviour
 {
+
+    public float MaxSpeed = 3f; // Walking speed
+
+    public Stack<IState<PlanetaryBody>> States;
     public bool RotationLocked;
     public Rigidbody Rigidbody { get { return GetComponent<Rigidbody>();  } }
+
+    public Vector3 Velocity
+    {
+        get { return Rigidbody.velocity;  }
+        protected set { Rigidbody.velocity = value;  }
+    }
+
+
     private Planet _planet;
     public Planet Planet {
         get {
@@ -83,6 +95,47 @@ public class PlanetaryBody : MonoBehaviour
 #endif
         var force = down * Rigidbody.mass * Globals.Gravitation;
         Rigidbody.AddForce(force, ForceMode.Force);
+    }
+
+    public void ClampSpeed()
+    {
+        Velocity = Vector3.ClampMagnitude(Velocity, MaxSpeed);
+    }
+
+    public void DebugVelocity(int timeStep = 2)
+    {
+        Debug.DrawLine(transform.position, transform.position + Velocity * timeStep, Color.magenta); 
+    }
+
+    public virtual void Start()
+    {
+        States = new Stack<IState<PlanetaryBody>>();
+        States.Push(PlanetaryBodyStates.Standing);
+    }
+
+    public virtual void Update()
+    {
+        States.Peek().Update(this);
+    }
+
+    public virtual void OnMouseDown()
+    { 
+        States.Peek().OnMouseDown(this);
+    }
+
+    public virtual void OnMouseDrag()
+    {
+        States.Peek().OnMouseDrag(this);
+    }
+
+    public virtual void OnMouseUp()
+    {
+        States.Peek().OnMouseUp(this);
+    }
+
+    public virtual void OnCollisionEnter(Collision collision)
+    {
+        States.Peek().OnCollisionEnter(this, collision);
     }
 
 }

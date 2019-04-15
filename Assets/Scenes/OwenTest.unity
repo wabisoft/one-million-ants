@@ -333,7 +333,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1299217480, guid: 990128168e8b3994f8c17f5b2467ed43, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 990128168e8b3994f8c17f5b2467ed43, type: 3}
@@ -1154,15 +1154,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6005406829563433979}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.06, z: -11.6}
+  m_LocalRotation: {x: -0.6887735, y: -0, z: -0, w: 0.72497666}
+  m_LocalPosition: {x: 0, y: 1.18, z: -10.07}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children:
   - {fileID: 6005406829563269019}
   - {fileID: 6005406829563269017}
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -87.066, y: 0, z: 0}
 --- !u!4 &6005406829563269085
 Transform:
   m_ObjectHideFlags: 0
@@ -1945,11 +1945,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd9c03f8b228f74448ce45767ae2abef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RotationLocked: 1
   MaxSpeed: 3
+  RotationLocked: 1
   PathRadius: 0.6
   ArriveRadius: 0.4
   Damage: 1
+  Target: {fileID: 0}
+  PathBack: {x: 0, y: 0, z: 0}
+  PathFront: {x: 0, y: 0, z: 0}
+  PathFrontIsTarget: 0
   PathVertices: 10
 --- !u!1 &6005406829563433983
 GameObject:
