@@ -10,7 +10,14 @@ public class PlanetaryBody : MonoBehaviour
 
     public Stack<IState<PlanetaryBody>> States;
     public bool RotationLocked;
-    public Rigidbody Rigidbody { get { return GetComponent<Rigidbody>();  } }
+    private new Rigidbody rigidbody;
+    public Rigidbody Rigidbody {
+        get {
+            if (! rigidbody)
+                rigidbody = GetComponent<Rigidbody>();
+            return rigidbody;
+        }
+    }
 
     public Vector3 Velocity
     {
@@ -75,15 +82,11 @@ public class PlanetaryBody : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 50 * Time.deltaTime);
     }
 
-    public void Gravitate()
+    public void Gravitate(float gravitation = Globals.Gravitation)
     {
         if (RotationLocked) {
             Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
         }
-
-        Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-
-        var down = Down; // cache up to avoid extra square routes
 
         if (RotationLocked)
         {
@@ -91,15 +94,29 @@ public class PlanetaryBody : MonoBehaviour
         }
         // var force_mag = (RelativeToPlanet.magnitude - Planet.Radius) / (int)SteeringBehavior.Deceleration.fast * 0.3f;
 #if DEBUG
-        Debug.DrawLine(transform.position, transform.position + down * 2, Color.black);
+        Debug.DrawLine(transform.position, transform.position + Down * 2, Color.black);
 #endif
-        var force = down * Rigidbody.mass * Globals.Gravitation;
+        var force = Down * Rigidbody.mass * gravitation;
         Rigidbody.AddForce(force, ForceMode.Force);
+        
     }
 
-    public void ClampSpeed()
+    public void Drag()
     {
-        Velocity = Vector3.ClampMagnitude(Velocity, MaxSpeed);
+        var rho = 1.2f;
+        var dragCoef = 0.5f;
+        var dragForceCoef = 0.5f * rho * dragCoef;
+        var dragForce = Velocity * -dragForceCoef;
+        Rigidbody.AddForce(dragForce, ForceMode.Force);
+    }
+
+    public void ClampSpeed(float? speed = null)
+    {
+        if (speed.HasValue) {
+            Velocity = Vector3.ClampMagnitude(Velocity, speed.Value);
+        } else {
+            Velocity = Vector3.ClampMagnitude(Velocity, MaxSpeed);
+        }
     }
 
     public void DebugVelocity(int timeStep = 2)
@@ -111,6 +128,12 @@ public class PlanetaryBody : MonoBehaviour
     {
         States = new Stack<IState<PlanetaryBody>>();
         States.Push(PlanetaryBodyStates.Standing);
+        Rigidbody.useGravity = false;
+    } 
+
+    public virtual void FixedUpdate()
+    {
+        States.Peek().FixedUpdate(this);
     }
 
     public virtual void Update()
@@ -138,4 +161,13 @@ public class PlanetaryBody : MonoBehaviour
         States.Peek().OnCollisionEnter(this, collision);
     }
 
+    public virtual void OnCollisionStay(Collision collision)
+    {
+        States.Peek().OnCollisionStay(this, collision);
+    }
+
+    public virtual void OnCollisionExit(Collision collision)
+    {
+        States.Peek().OnCollisionExit(this, collision);
+    }
 }

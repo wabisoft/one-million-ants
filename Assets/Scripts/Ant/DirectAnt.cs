@@ -11,65 +11,56 @@ public class DirectAnt: Ant
     public Vector3 PathFront;
     public bool PathFrontIsTarget = false;
     public int PathVertices = 10;
+    //public List<Vector3> path;
 
     public override void Start()
     {
         base.Start();
         States.Push(AntStates.Pathing as IState<PlanetaryBody>);
+        PlanetaryBodyStates.Falling.Enter(this);
+        States.Push(PlanetaryBodyStates.Falling);
         Target = GameObject.FindObjectOfType<Base>();
         SetPathPoints();
     }
 
     public void SetPathPoints()
     {
-        var baseRelPosToPlanet = Target.transform.position - Planet.transform.position;
-        var antRelPosToPlanet = transform.position - Planet.transform.position;
-        float theta = Vector3.Angle(antRelPosToPlanet, baseRelPosToPlanet) * Mathf.Deg2Rad;
-        float dTheta = theta / (float)PathVertices;
-        float phi = Mathf.Atan((transform.position.z / transform.position.x));
-        if (transform.position.x < 0){
-            phi += Mathf.PI;
-        }
+        var relToTarget = Target.transform.position - transform.position;
+        var delta = relToTarget.magnitude / PathVertices;
+        var forwardPos = transform.position + relToTarget.normalized * delta;
+        var backwardPos = transform.position - relToTarget.normalized * delta;
         var adjustedRadius = Planet.Radius + transform.localScale.y;
-
-        if (dTheta * Mathf.Rad2Deg < 5) {
-            PathBack = Utilities.SphericalToCartesian(adjustedRadius, theta + 5*Mathf.Rad2Deg, phi);
-            PathFront = Target.transform.position;
-            PathFrontIsTarget = true;
-        } else {
-            PathBack = Utilities.SphericalToCartesian(adjustedRadius, theta + dTheta, phi);
-            PathFront = Utilities.SphericalToCartesian(adjustedRadius, theta - dTheta, phi);
-            PathFrontIsTarget = false;
-        }
+        PathFront = (forwardPos - Planet.transform.position).normalized * adjustedRadius;
+        PathBack = (backwardPos - Planet.transform.position).normalized * adjustedRadius;
+      
     }
 
     public override void Path()
     {
 
-        if (! PathFrontIsTarget){
-            var projection = Vector3.Project(transform.position - PathBack, PathFront - PathBack);
-            Debug.DrawLine(transform.position, projection, Color.magenta);
-            Debug.DrawLine(transform.position, PathBack + projection, Color.green);
-            if ((transform.position - (PathBack + projection)).magnitude > PathRadius + 0.1 ||
-                (PathFront - transform.position).sqrMagnitude < 0.05){
-                SetPathPoints();
-            }
+        var projection = Vector3.Project(transform.position - PathBack, PathFront - PathBack);
+
+        if ((transform.position - (PathBack + projection)).magnitude > PathRadius * 2 ||
+            (PathFront - transform.position).sqrMagnitude < 0.05) {
+            SetPathPoints();
         }
 
-        Velocity = Steering.Path(PathBack, PathFront);
-        if (Vector3.Cross(Down, Velocity) != Vector3.zero) {
+        Rigidbody.velocity = Steering.Path(PathBack, PathFront);
+        if (Vector3.Dot(Down, Velocity) < 0.001f) { // this is true when we're just not moving. (our velocity is either straight up or straight down)
             NormalizeMovement();
             FaceFront();
+            ClampSpeed();
         }
-        ClampSpeed();
 #if DEBUG
         Utilities.DebugPath(new List<Vector3> { PathBack, PathFront });
+        DebugVelocity();
 #endif
     }
 
     public override void NormalizeMovement(){
         if (Grounded()){
-            Velocity = transform.forward * Velocity.magnitude;
+            //Velocity = new Vector3(Velocity.x, 0f, Velocity.z);
+            // Velocity = transform.forward * Velocity.magnitude;
         }
     }
 

@@ -6,21 +6,10 @@ public class Base : PlanetaryBody
 {
     public float HP = 100;
 
-    private void Update()
+    public override void Start()
     {
-        if (HP <= 0) {
-            //Debug.Log("GAME OVER");
-        }
+        base.Start();
+        States.Pop();
+        States.Push(BaseStates.Standing);
     }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        var a = collision.gameObject.GetComponent<Ant>();
-        if (a) {
-            a.Attack(this);
-            // GameObject.Destroy(a.gameObject);
-        }
-        
-    }
-
 }

@@ -1,25 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public abstract class PlanetaryBodyState : IState<PlanetaryBody>
-{
-    /* 
-       Shitty default interface :\ 
-       Means we only have to impliment the parts of IState we care about
-       for each state.
-    */
-    public virtual void Enter(PlanetaryBody t) { }
-    public virtual void Exit(PlanetaryBody t) { }
-    public virtual void OnCollisionEnter(PlanetaryBody t, Collision c) { }
-    public virtual void OnMouseDown(PlanetaryBody t) { }
-    public virtual void OnMouseDrag(PlanetaryBody t) { }
-    public virtual void OnMouseUp(PlanetaryBody t) { }
-    public virtual void Update(PlanetaryBody t) { }
-}
 
-public class PlanetaryBodyStandingState : PlanetaryBodyState
+public class PlanetaryBodyStandingState : State<PlanetaryBody>
 {
-    public override void Update(PlanetaryBody pb)
+    public override void FixedUpdate(PlanetaryBody pb)
     {
         // Just gravitate to planet, and do nothing else;
         pb.Gravitate();
@@ -27,12 +12,13 @@ public class PlanetaryBodyStandingState : PlanetaryBodyState
 
     public override void OnMouseDown(PlanetaryBody pb)
     {
+        pb.States.Peek().Exit(pb);
         PlanetaryBodyStates.Dragging.Enter(pb);
         pb.States.Push(PlanetaryBodyStates.Dragging as IState<PlanetaryBody>);
     }
 }
 
-public class PlanetaryBodyDraggingState : PlanetaryBodyState
+public class PlanetaryBodyDraggingState : State<PlanetaryBody>
 {
    /*
      * I __think__ that having these as members is going to be ok (remember that these state instances are static)
@@ -41,19 +27,21 @@ public class PlanetaryBodyDraggingState : PlanetaryBodyState
      * A-OK (probably) .... guess I'll find out.
      */
     private Vector3 AxisOfRotation;
+    private Vector3 PreviousPos;
     private float Theta;
 
 
 
     public override void OnMouseUp(PlanetaryBody pb)
     {
-        var relpos = pb.transform.position - pb.Planet.transform.position;
+        //var relpos = pb.transform.position - pb.Planet.transform.position;
 
-        var _omega = Theta * AxisOfRotation.normalized; // really this should be deltaTheta/deltaTime but that didn't give me the behavior I wpb. \_(?)_/
-        var tangentialVelocity = Vector3.Cross(_omega, relpos);
-        pb.Rigidbody.velocity = Vector3.ClampMagnitude(tangentialVelocity, pb.Planet.OrbitalVelocity);
-
-        pb.States.Pop();  // pop this state of the pb's state stack (say that 5 times fast)
+        //var _omega = Theta * AxisOfRotation.normalized / Time.deltaTime; // really this should be deltaTheta/deltaTime but that didn't give me the behavior I wpb. \_(?)_/
+        //var tangentialVelocity = Vector3.Cross(_omega, relpos);
+        //pb.Rigidbody.velocity = Vector3.ClampMagnitude(tangentialVelocity, pb.Planet.OrbitalVelocity);
+        var moveDir = (pb.transform.position - PreviousPos) / Time.deltaTime;
+        pb.Rigidbody.velocity = Vector3.ClampMagnitude(moveDir, pb.Planet.OrbitalVelocity);
+        pb.States.Pop().Exit(pb);  // pop this state off the pb's state stack (say that 5 times fast)
         PlanetaryBodyStates.Falling.Enter(pb);
         pb.States.Push(PlanetaryBodyStates.Falling);
     }
@@ -62,6 +50,7 @@ public class PlanetaryBodyDraggingState : PlanetaryBodyState
     {
         var hit = Utilities.GetPlanetHit(pb.Planet);
         if (hit.HasValue) {
+            PreviousPos = pb.transform.position;
             var hitPointRelVec = hit.Value.point - pb.Planet.transform.position;
             AxisOfRotation = Vector3.Cross(pb.Up, hitPointRelVec);
             Theta = Vector3.SignedAngle(pb.Up, hitPointRelVec, AxisOfRotation);
@@ -77,19 +66,21 @@ public class PlanetaryBodyDraggingState : PlanetaryBodyState
     }
 }
 
-public class PlanetaryBodyFallingState : PlanetaryBodyState
+public class PlanetaryBodyFallingState : State<PlanetaryBody>
 {
-    public override void Update(PlanetaryBody pb)
+    public override void FixedUpdate(PlanetaryBody pb)
     {
-        pb.Gravitate();
-        pb.ClampSpeed();
+        pb.Gravitate(Globals.Gravitation * 2f);
+        pb.Drag();
+        //pb.ClampSpeed(pb.Planet.OrbitalVelocity * 0.75f);
     }
 
     public override void OnCollisionEnter(PlanetaryBody pb, Collision collision)
     {
         Planet planet;
         if (planet = collision.gameObject.GetComponent<Planet>()) {
-            pb.States.Pop(); // Pop falling off the ant state stack
+            pb.States.Pop().Exit(pb); // Pop falling off the ant state stack
+            pb.States.Peek().Enter(pb);
         }
     }
 }    

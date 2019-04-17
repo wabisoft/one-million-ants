@@ -9,14 +9,6 @@ public abstract class Ant : Vehicle
     public bool Active { get { return gameObject.activeInHierarchy; } }
     // public Stack<IState<Ant>> States;
 
-    public override void Start()
-    {
-        base.Start();
-        Rigidbody.velocity = Vector3.zero;
-        Planet = Utilities.SelectPlanet(gameObject);
-        Rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-        Rigidbody.useGravity = false;
-    }
 
     public void Attack(Base b)
     {

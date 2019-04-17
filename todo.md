@@ -8,3 +8,7 @@
 [ ] DirectAnt path has 2 solutions, trig or vectors. you decide (figure out which is faster and pick that one)
 [ ] Merge master. Then start deleting all the excess/merging to clean project
 
+
+# Ian
+[ ] Fix models to have more balanced anchor points
+
