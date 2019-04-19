@@ -6,10 +6,10 @@ using UnityEngine;
 
 
 // Override the standing state for now to get transitions, but later this should probably handle it's own transtitions
-public class AntPathingState : PlanetaryBodyStandingState 
+public class UnitPathingState : PlanetaryBodyStandingState 
 {
     
-    public override void Update(PlanetaryBody pb)
+    public override void FixedUpdate(PlanetaryBody pb)
     {
         //base.Update(pb);
         pb.Gravitate();
@@ -17,23 +17,23 @@ public class AntPathingState : PlanetaryBodyStandingState
 
         // somewhere deep in my loins this feel very wrong, I think it's cause I'm down casting which just seems like it should be an error
         // ^ I looked this up and it seems to be fairly exceptable, but it feels wrong and I don't like it. damned OOP.
-        var ant = pb as Ant; 
-        if (!ant) { 
+        var unit = pb as Unit; 
+        if (!unit) { 
             throw new Exception("AntPathingState.Update! Bad cast"); // Just fail your face off if this happens
         }
 
-        ant.Path();
+        unit.Path();
     }
     // TODO: ... something ... 
 }
 
-public static class AntStates
+public static class UnitStates
 {
     public static IState<PlanetaryBody> Pathing;
 
-    static AntStates()
+    static UnitStates()
     {
-        Pathing = new AntPathingState();
+        Pathing = new UnitPathingState();
     }
 
 }

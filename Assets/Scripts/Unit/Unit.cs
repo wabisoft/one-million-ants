@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Ant : Vehicle
+public abstract class Unit : Vehicle
 {
     public float Damage = 1;
     protected List<Vector3> _path = null;

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public int MaxConcurrentAnts = 100;
+    public int MaxConcurrentUnits = 100;
     public float SpawnTime = 1.0f;
     public Planet Planet { get; private set; } 
     public Base Base { get; private set; }
     private Light _sun;
-    public List<Ant> AntPool;
+    public List<Unit> AntPool;
     public Transform AntSpawn1;
     public Ship Ship { get; private set; }
     private float timeSinceLastAntSpawned = 0;
@@ -19,15 +19,15 @@ public class GameManager : MonoBehaviour
         Planet = Utilities.SelectPlanet(gameObject);
         Ship = FindObjectOfType<Ship>();
         Base = FindObjectOfType<Base>();
-        AntPool = new List<Ant>();
+        AntPool = new List<Unit>();
         _sun = FindObjectOfType<Light>();
         InitAntPool();
     }
 
     void InitAntPool()
     {
-        for (int i = 0; i < MaxConcurrentAnts; i++) {
-            var ant = (Instantiate(Resources.Load("SpiralAnt")) as GameObject).GetComponent<Ant>();
+        for (int i = 0; i < MaxConcurrentUnits; i++) {
+            var ant = (Instantiate(Resources.Load("SpiralAnt")) as GameObject).GetComponent<Unit>();
             ant.gameObject.SetActive(false);
             // ant.GameManager = this;
             AntPool.Add(ant);
@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     void SpawnAnt(Vector3 pos)
     {
-        for (int i = 0; i < MaxConcurrentAnts; i++) {
+        for (int i = 0; i < MaxConcurrentUnits; i++) {
             if (!AntPool[i].Active) {
                 AntPool[i].Spawn(pos);
                 return;

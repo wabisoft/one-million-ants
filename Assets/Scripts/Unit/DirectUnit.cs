@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DirectAnt: Ant
+public class DirectUnit : Unit
 {
 
     public PlanetaryBody Target;
@@ -16,7 +16,7 @@ public class DirectAnt: Ant
     public override void Start()
     {
         base.Start();
-        States.Push(AntStates.Pathing as IState<PlanetaryBody>);
+        States.Push(UnitStates.Pathing as IState<PlanetaryBody>);
         PlanetaryBodyStates.Falling.Enter(this);
         States.Push(PlanetaryBodyStates.Falling);
         Target = GameObject.FindObjectOfType<Base>();
