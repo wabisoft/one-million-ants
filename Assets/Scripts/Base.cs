@@ -9,7 +9,7 @@ public class Base : PlanetaryBody
     public override void Start()
     {
         base.Start();
-        States.Pop();
-        States.Push(BaseStates.Standing);
+        Motions.Pop();
+        Motions.Push(BaseMotions.Standing);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,10 +7,13 @@ using UnityEngine;
 public class PlanetaryBody : MonoBehaviour
 {
 
+    public event Action<PlanetaryBody> OnPlanetaryBodyClicked;
+
     public float MaxSpeed = 3f; // Walking speed
 
-    public Stack<IState<PlanetaryBody>> States;
-    public bool RotationLocked;
+    public Stack<PlanetaryBodyMotion> Motions;
+    public bool RotationLocked; 
+
     private new Rigidbody rigidbody;
     public Rigidbody Rigidbody {
         get {
@@ -43,6 +47,13 @@ public class PlanetaryBody : MonoBehaviour
     {
         get {
             return transform.position - Planet.transform.position;
+        }
+    }
+
+    public Vector3 OnPlanetPosition
+    {
+        get {
+            return RelativeToPlanet.normalized * Planet.Radius + Planet.transform.position;
         }
     }
 
@@ -92,7 +103,6 @@ public class PlanetaryBody : MonoBehaviour
         {
             StayUp();
         }
-        // var force_mag = (RelativeToPlanet.magnitude - Planet.Radius) / (int)SteeringBehavior.Deceleration.fast * 0.3f;
 #if DEBUG
         Debug.DrawLine(transform.position, transform.position + Down * 2, Color.black);
 #endif
@@ -126,48 +136,67 @@ public class PlanetaryBody : MonoBehaviour
 
     public virtual void Start()
     {
-        States = new Stack<IState<PlanetaryBody>>();
-        States.Push(PlanetaryBodyStates.Standing);
+        Motions = new Stack<PlanetaryBodyMotion>();
+        Motions.Push(PlanetaryBodyMotions.Standing);
         Rigidbody.useGravity = false;
     } 
 
+    public virtual void OnEnable()
+    {
+        Planet.OnClicked += OnPlanetClicked;
+    }
+
+    public virtual void OnDisable()
+    {
+        Planet.OnClicked -= OnPlanetClicked;
+    }
+
     public virtual void FixedUpdate()
     {
-        States.Peek().FixedUpdate(this);
+        Motions.Peek().FixedUpdate(this);
     }
 
     public virtual void Update()
     {
-        States.Peek().Update(this);
+        Motions.Peek().Update(this);
     }
 
     public virtual void OnMouseDown()
-    { 
-        States.Peek().OnMouseDown(this);
+    {
+        // Emit OnClicked for this PlanetaryBody
+        if (OnPlanetaryBodyClicked != null)
+            OnPlanetaryBodyClicked(this);
+        // Let the state try and do stuff too.
+        Motions.Peek().OnMouseDown(this);
     }
 
     public virtual void OnMouseDrag()
     {
-        States.Peek().OnMouseDrag(this);
+        Motions.Peek().OnMouseDrag(this);
     }
 
     public virtual void OnMouseUp()
     {
-        States.Peek().OnMouseUp(this);
+        Motions.Peek().OnMouseUp(this);
     }
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-        States.Peek().OnCollisionEnter(this, collision);
+        Motions.Peek().OnCollisionEnter(this, collision);
     }
 
     public virtual void OnCollisionStay(Collision collision)
     {
-        States.Peek().OnCollisionStay(this, collision);
+        Motions.Peek().OnCollisionStay(this, collision);
     }
 
     public virtual void OnCollisionExit(Collision collision)
     {
-        States.Peek().OnCollisionExit(this, collision);
+        Motions.Peek().OnCollisionExit(this, collision);
+    }
+
+    public virtual void OnPlanetClicked()
+    {
+        Motions.Peek().OnPlanetClicked(this);
     }
 }

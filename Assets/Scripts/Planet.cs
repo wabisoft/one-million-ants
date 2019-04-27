@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Planet : MonoBehaviour
 {
+    public event Action OnClicked;
+
     public PlanetDragController Drag { get { return GetComponent<PlanetDragController>(); } }
     public SphereCollider Sphere { get { return GetComponent<SphereCollider>(); } }
     public float Radius {
@@ -23,6 +26,12 @@ public class Planet : MonoBehaviour
     public Vector3 Random()
     {
         return UnityEngine.Random.onUnitSphere * Radius;
+    }
+
+    public void OnMouseDown()
+    {
+        if (OnClicked != null)
+            OnClicked();
     }
 
 }

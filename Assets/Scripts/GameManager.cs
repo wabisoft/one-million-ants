@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     public float SpawnTime = 1.0f;
     public Planet Planet { get; private set; } 
     public Base Base { get; private set; }
-    private Light _sun;
+    private Light Sun;
     public List<Unit> AntPool;
     public Transform AntSpawn1;
     public Ship Ship { get; private set; }
@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
         Ship = FindObjectOfType<Ship>();
         Base = FindObjectOfType<Base>();
         AntPool = new List<Unit>();
-        _sun = FindObjectOfType<Light>();
+        Sun = FindObjectOfType<Light>();
         InitAntPool();
     }
 
@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _sun.transform.RotateAround(Planet.transform.position, Vector3.up, Time.deltaTime); // make it look like time passing with moving sun (geocentric theory 4 lyfe), fuck copernicus!
+        Sun.transform.RotateAround(Planet.transform.position, Vector3.up, Time.deltaTime); // make it look like time passing with moving sun (geocentric theory 4 lyfe), fuck copernicus!
         if (timeSinceLastAntSpawned > SpawnTime) {
             SpawnAnt(AntSpawn1.position);
             timeSinceLastAntSpawned = 0;
@@ -57,9 +57,7 @@ public class GameManager : MonoBehaviour
         
 
         if (Ship.Complete) {
-            Debug.Log("Yay");
         } else if (Base.HP <= 0){
-            Debug.Log("You loose");
         }
     }
 }

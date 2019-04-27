@@ -32,7 +32,7 @@ public class PlanetDragController : MonoBehaviour
 
     public void OnMouseDrag()
     {
-        var hit = Utilities.GetPlanetHit(GetComponent<Planet>());
+        var hit = Utilities.GetAnyPlanetHit(GetComponent<Planet>());
         Vector3? currentPoint = null;
         if (hit.HasValue)
         {

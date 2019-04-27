@@ -6,46 +6,48 @@ using UnityEngine;
 public class DirectUnit : Unit
 {
 
-    public PlanetaryBody Target;
     public Vector3 PathBack;
     public Vector3 PathFront;
-    public bool PathFrontIsTarget = false;
     public int PathVertices = 10;
     //public List<Vector3> path;
 
     public override void Start()
     {
         base.Start();
-        States.Push(UnitStates.Pathing as IState<PlanetaryBody>);
-        PlanetaryBodyStates.Falling.Enter(this);
-        States.Push(PlanetaryBodyStates.Falling);
-        Target = GameObject.FindObjectOfType<Base>();
+        Motions.Push(UnitMotions.Standing);
+        PlanetaryBodyMotions.Falling.Enter(this);
+        Motions.Push(PlanetaryBodyMotions.Falling);
         SetPathPoints();
     }
 
     public void SetPathPoints()
     {
-        var relToTarget = Target.transform.position - transform.position;
+        var relToTarget = Target - transform.position;
         var delta = relToTarget.magnitude / PathVertices;
         var forwardPos = transform.position + relToTarget.normalized * delta;
         var backwardPos = transform.position - relToTarget.normalized * delta;
-        var adjustedRadius = Planet.Radius + transform.localScale.y;
-        PathFront = (forwardPos - Planet.transform.position).normalized * adjustedRadius;
-        PathBack = (backwardPos - Planet.transform.position).normalized * adjustedRadius;
+        //var adjustedRadius = Planet.Radius + transform.localScale.y;
+        // PathFront = (forwardPos - Planet.transform.position).normalized * adjustedRadius;
+        // PathBack = (backwardPos - Planet.transform.position).normalized * adjustedRadius;
+        PathFront = (forwardPos - Planet.transform.position).normalized * Planet.Radius;
+        PathBack = (backwardPos - Planet.transform.position).normalized * Planet.Radius;
       
     }
 
     public override void Path()
     {
 
-        var projection = Vector3.Project(transform.position - PathBack, PathFront - PathBack);
+        // project the on planet position of this object onto the 
 
-        if ((transform.position - (PathBack + projection)).magnitude > PathRadius * 2 ||
-            (PathFront - transform.position).sqrMagnitude < 0.05) {
+        var projection = Vector3.Project(OnPlanetPosition - PathBack, PathFront - PathBack);
+
+        if ((OnPlanetPosition - (PathBack + projection)).magnitude > PathRadius * 2 ||
+            (PathFront - OnPlanetPosition).sqrMagnitude < 0.05) {
             SetPathPoints();
         }
 
-        Rigidbody.velocity = Steering.Path(PathBack, PathFront);
+        // Rigidbody.velocity += Steering.Path(PathBack, PathFront);
+        Rigidbody.velocity += Steering.Seek(PathFront);
         if (Vector3.Dot(Down, Velocity) < 0.001f) { // this is true when we're just not moving. (our velocity is either straight up or straight down)
             NormalizeMovement();
             FaceFront();

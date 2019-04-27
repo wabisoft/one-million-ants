@@ -10,6 +10,58 @@ public class Utilities
 
     public static float Epsilon = 1.01f;
 
+    public static Planet SelectPlanet(GameObject target)
+    {
+        Planet p = null;
+        var minDist = float.PositiveInfinity;
+        foreach(var planet in GameObject.FindObjectsOfType<Planet>())
+        {
+            if ((target.transform.position - planet.transform.position).sqrMagnitude < minDist) { p = planet; }
+        }
+        return p;
+    }
+
+    public static RaycastHit? GetTopPlanetHit(Planet planet)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 1000)) {
+            return hit;
+        }
+        return null;
+    }
+
+    public static RaycastHit? GetAnyPlanetHit(Planet planet)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        var hits = Physics.RaycastAll(ray);
+        foreach (var hit in hits) {
+            if (hit.collider as SphereCollider == planet.Sphere) { return hit; }
+        }
+        return null;
+
+    }
+
+    public static void DebugPath(List<Vector3> path)
+    {
+        for (int i = 1; i < path.Count; i++)
+        {
+            Debug.DrawLine(path[i - 1], path[i], Color.red);
+        }
+    }
+
+    public static Vector3 SphericalToCartesian(float radius, float theta, float phi)
+    {
+        return new Vector3(
+            radius * Mathf.Sin(theta) * Mathf.Cos(phi),
+            radius * Mathf.Cos(theta),
+            radius * Mathf.Sin(theta) * Mathf.Sin(phi)
+        );
+    }
+}
+
+
+/*
     // Doesn't get a real geodesic
     // just computes a circle on the centering from center
     public static void ComputeCirclePath(ref Vector3[] arr, Vector3 center, float radius)
@@ -74,43 +126,5 @@ public class Utilities
     }
 
 
-    public static Planet SelectPlanet(GameObject target)
-    {
-        Planet p = null;
-        var minDist = float.PositiveInfinity;
-        foreach(var planet in GameObject.FindObjectsOfType<Planet>())
-        {
-            if ((target.transform.position - planet.transform.position).sqrMagnitude < minDist) { p = planet; }
-        }
-        return p;
-    }
 
-
-    public static RaycastHit? GetPlanetHit(Planet planet)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        var hits = Physics.RaycastAll(ray);
-        foreach (var hit in hits) {
-            if (hit.collider as SphereCollider == planet.Sphere) { return hit; }
-        }
-        return null;
-
-    }
-
-    public static void DebugPath(List<Vector3> path)
-    {
-        for (int i = 1; i < path.Count; i++)
-        {
-            Debug.DrawLine(path[i - 1], path[i], Color.red);
-        }
-    }
-
-    public static Vector3 SphericalToCartesian(float radius, float theta, float phi)
-    {
-        return new Vector3(
-            radius * Mathf.Sin(theta) * Mathf.Cos(phi),
-            radius * Mathf.Cos(theta),
-            radius * Mathf.Sin(theta) * Mathf.Sin(phi)
-        );
-    }
-}
+*/

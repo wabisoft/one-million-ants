@@ -1,14 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Unit : Vehicle
 {
-    public float Damage = 1;
-    protected List<Vector3> _path = null;
-    public bool Active { get { return gameObject.activeInHierarchy; } }
-    // public Stack<IState<Ant>> States;
+    public event Action<Unit> OnUnitClicked;
 
+    public float Damage = 1;
+    // public Material selectedMat = null;
+    public Shader selectedShader = null;
+    public Shader notSelectedShader = null;
+    public Vector3 Target;
+    public bool Active { get { return gameObject.activeInHierarchy; } }
 
     public void Attack(Base b)
     {
@@ -30,4 +34,10 @@ public abstract class Unit : Vehicle
 
     public virtual void Path() { }  // Override me for behavior!
 
+    public override void OnMouseDown()
+    {
+        base.OnMouseDown();
+        if (OnUnitClicked != null)
+            OnUnitClicked(this);
+    }
 }
