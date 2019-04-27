@@ -29,9 +29,12 @@ public class Player : MonoBehaviour
     public void OnEnable()
     {
         foreach(var pb in FindObjectsOfType<PlanetaryBody>())
-            pb.OnPlanetaryBodyClicked += OnPlanetaryBodyClicked;
+            pb.OnClicked += OnPlanetaryBodyClicked;
         foreach (var unit in FindObjectsOfType<Unit>())
-            unit.OnUnitClicked += OnUnitClicked;
+        {
+            unit.OnClicked -= OnPlanetaryBodyClicked;
+            unit.OnClicked += OnUnitClicked;
+        }
 
         Planet.OnClicked += OnPlanetClicked;
     }
@@ -50,8 +53,9 @@ public class Player : MonoBehaviour
 
     }
 
-    public void OnUnitClicked(Unit unit)
+    public void OnUnitClicked(PlanetaryBody pb)
     {
+        Unit unit = pb as Unit;
         Debug.Log("Unit clicked");
     }
 }

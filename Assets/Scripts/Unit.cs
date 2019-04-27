@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class Unit : Vehicle
 {
-    public event Action<Unit> OnUnitClicked;
+    public override event Action<PlanetaryBody> OnClicked;
 
     public float Damage = 1;
     // public Material selectedMat = null;
@@ -36,8 +36,9 @@ public abstract class Unit : Vehicle
 
     public override void OnMouseDown()
     {
-        base.OnMouseDown();
-        if (OnUnitClicked != null)
-            OnUnitClicked(this);
+        //base.OnMouseDown();
+        if (OnClicked != null)
+            OnClicked(this);
+        Motions.Peek().OnMouseDown(this);
     }
 }

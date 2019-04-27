@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlanetaryBody : MonoBehaviour
 {
 
-    public event Action<PlanetaryBody> OnPlanetaryBodyClicked;
+    public virtual event Action<PlanetaryBody> OnClicked;
 
     public float MaxSpeed = 3f; // Walking speed
 
@@ -164,8 +164,8 @@ public class PlanetaryBody : MonoBehaviour
     public virtual void OnMouseDown()
     {
         // Emit OnClicked for this PlanetaryBody
-        if (OnPlanetaryBodyClicked != null)
-            OnPlanetaryBodyClicked(this);
+        if (OnClicked != null)
+            OnClicked(this);
         // Let the state try and do stuff too.
         Motions.Peek().OnMouseDown(this);
     }
